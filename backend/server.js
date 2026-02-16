@@ -6,6 +6,7 @@ const cors = require("cors");
 const path = require("path");
 const rateLimit = require("express-rate-limit");
 const config = require("./config/env");
+const logger = require("./utils/logger");
 
 const app = express();
 const PORT = config.port;
@@ -72,5 +73,6 @@ app.use(errorHandler);
 
 // Arrancar servidor
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  logger.info(`Servidor corriendo en http://localhost:${PORT}`);
+  logger.info(`Entorno: ${config.nodeEnv}`);
 });

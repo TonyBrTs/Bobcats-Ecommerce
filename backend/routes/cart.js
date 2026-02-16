@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const clientPromise = require("../services/mongodb");
 const authenticateToken = require("../middleware/auth");
+const logger = require("../utils/logger");
 
 router.post('/update-cart', authenticateToken, async (req, res) => {
   const { username, cart } = req.body;
@@ -19,7 +20,7 @@ router.post('/update-cart', authenticateToken, async (req, res) => {
     );
     res.json({ message: "Cart updated successfully." });
   } catch (error) {
-    console.error('Error en cart:', error);
+    logger.error('Error en cart:', { error: error.message, stack: error.stack });
     res.status(500).json({ message: "Database error." });
   }
 });
@@ -36,7 +37,7 @@ router.get('/get-cart', authenticateToken, async (req, res) => {
     const userCart = await db.collection('carts').findOne({ username });
     res.json({ cart: userCart?.cart || [] });
   } catch (error) {
-    console.error('Error en cart:', error);
+    logger.error('Error en cart:', { error: error.message, stack: error.stack });
     res.status(500).json({ message: "Database error." });
   }
 });

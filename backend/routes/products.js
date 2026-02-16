@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const clientPromise = require('../services/mongodb')
+const logger = require('../utils/logger')
 
 router.get('/', async (req, res) => {
   try {
@@ -9,7 +10,7 @@ router.get('/', async (req, res) => {
     const products = await db.collection('products').find({}).toArray()
     res.json(products)
   } catch (error) {
-    console.error('Error fetching products from MongoDB:', error)
+    logger.error('Error fetching products from MongoDB:', { error: error.message, stack: error.stack })
     res.status(500).json({ message: 'Error al obtener productos' })
   }
 })

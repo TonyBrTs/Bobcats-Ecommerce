@@ -3,14 +3,17 @@
  * Captura todos los errores y los formatea de manera consistente
  */
 
+const logger = require("../utils/logger");
+
 const errorHandler = (err, req, res, next) => {
   // Log del error completo en el servidor
-  console.error("Error:", {
+  logger.error("Error capturado:", {
     message: err.message,
     stack: err.stack,
     path: req.path,
     method: req.method,
-    timestamp: new Date().toISOString(),
+    ip: req.ip,
+    userAgent: req.get("user-agent"),
   });
 
   // Si la respuesta ya fue enviada, delegar al handler por defecto de Express

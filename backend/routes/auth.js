@@ -1,12 +1,8 @@
 require("dotenv").config();
 const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const router = express.Router();
-const clientPromise = require("../services/mongodb");
-const config = require("../config/env");
 const { validateFields } = require("../utils/validators");
-const SECRET_KEY = config.jwtSecret;
+const userService = require("../services/userService");
 
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
@@ -35,46 +31,17 @@ router.post("/register", async (req, res) => {
   }
 
   try {
-    const client = await clientPromise;
-    const db = client.db("BobcatsDB");
-    const usersCollection = db.collection("users");
-
-    // Check if email or username already exists
-    const existingUser = await usersCollection.findOne({
-      $or: [{ email }, { username }],
-    });
-    if (existingUser) {
-      return res
-        .status(409)
-        .json({ message: "El usuario o correo electrónico ya existe" });
-    }
-
-    // Get the last user id and increment
-    const lastUser = await usersCollection
-      .find()
-      .sort({ id: -1 })
-      .limit(1)
-      .toArray();
-    const newUserId = lastUser.length > 0 ? lastUser[0].id + 1 : 1;
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = {
-      id: newUserId,
-      username,
-      email,
-      password: hashedPassword,
-    };
-
-    await usersCollection.insertOne(newUser);
-
+    const user = await userService.registerUser(username, email, password);
     res.status(201).json({
       message: "Usuario registrado exitosamente",
-      user: { id: newUserId, username, email },
+      user,
     });
   } catch (error) {
-    console.error("Error en registro:", error);
-    res.status(500).json({ message: "Error en la base de datos" });
+    // Si el error tiene un status code, usarlo; si no, 500
+    const statusCode = error.status || 500;
+    res.status(statusCode).json({
+      message: error.message || "Error en la base de datos",
+    });
   }
 });
 
@@ -106,32 +73,18 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    const client = await clientPromise;
-    const db = client.db("BobcatsDB");
-    const usersCollection = db.collection("users");
-
-    const user = await usersCollection.findOne({ email });
-    if (!user) {
-      return res.status(401).json({ message: "Credenciales inválidas" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Credenciales inválidas" });
-    }
-
-    const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
-      expiresIn: config.jwtExpiresIn,
-    });
-
+    const result = await userService.loginUser(email, password);
     res.json({
       message: "Login exitoso",
-      token,
-      user: { id: user.id, username: user.username, email: user.email },
+      token: result.token,
+      user: result.user,
     });
   } catch (error) {
-    console.error("Error en registro:", error);
-    res.status(500).json({ message: "Error en la base de datos" });
+    // Si el error tiene un status code, usarlo; si no, 500
+    const statusCode = error.status || 500;
+    res.status(statusCode).json({
+      message: error.message || "Error en la base de datos",
+    });
   }
 });
 

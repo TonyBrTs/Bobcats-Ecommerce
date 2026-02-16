@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const clientPromise = require('../services/mongodb');
 const authenticateToken = require('../middleware/auth');
+const logger = require('../utils/logger');
 
 router.post("/update-favorites", authenticateToken, async (req, res) => {
   const { username, favorites } = req.body;
@@ -19,7 +20,7 @@ router.post("/update-favorites", authenticateToken, async (req, res) => {
     );
     res.json({ message: "Favorites updated successfully." });
   } catch (error) {
-    console.error('Error en favorites:', error);
+    logger.error('Error en favorites:', { error: error.message, stack: error.stack });
     res.status(500).json({ message: "Database error." });
   }
 });
@@ -38,7 +39,7 @@ router.get("/get-favorites", authenticateToken, async (req, res) => {
     const userFav = await db.collection('favorites').findOne({ username });
     res.json({ favorites: userFav?.favorites || [] });
   } catch (error) {
-    console.error('Error en favorites:', error);
+    logger.error('Error en favorites:', { error: error.message, stack: error.stack });
     res.status(500).json({ message: "Database error." });
   }
 });

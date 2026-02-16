@@ -49,3 +49,7 @@ dist/
 # --- TypeScript ---
 next-env.d.ts
 *.tsbuildinfo
+
+# --- Logs ---
+/backend/logs/
+*.log

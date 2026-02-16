@@ -16,11 +16,9 @@ const authenticateToken = (req, res, next) => {
   jwt.verify(token, config.jwtSecret, (err, user) => {
     if (err) {
       if (err.name === "TokenExpiredError") {
-        return res
-          .status(403)
-          .json({
-            message: "Token expirado. Por favor inicia sesión nuevamente",
-          });
+        return res.status(403).json({
+          message: "Token expirado. Por favor inicia sesión nuevamente",
+        });
       }
       if (err.name === "JsonWebTokenError") {
         return res.status(403).json({ message: "Token inválido" });

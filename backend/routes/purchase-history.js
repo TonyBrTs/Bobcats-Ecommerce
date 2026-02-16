@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const clientPromise = require('../services/mongodb');
+const authenticateToken = require('../middleware/auth');
 
 // POST: Agregar una nueva compra al historial
-router.post("/add-purchase", async (req, res) => {
+router.post("/add-purchase", authenticateToken, async (req, res) => {
   const { username, purchase } = req.body;
 
   if (!username || !purchase) {
@@ -22,13 +23,14 @@ router.post("/add-purchase", async (req, res) => {
 
     res.json({ message: "Purchase added successfully." });
   } catch (error) {
-    res.status(500).json({ message: "Database error.", error });
+    console.error('Error en purchase-history:', error);
+    res.status(500).json({ message: "Database error." });
   }
 });
 
 
 // GET: Obtener historial de compras
-router.get("/get-purchase-history", async (req, res) => {
+router.get("/get-purchase-history", authenticateToken, async (req, res) => {
   const { username } = req.query;
 
   if (!username) {
@@ -42,7 +44,8 @@ router.get("/get-purchase-history", async (req, res) => {
 
     res.json({ purchases: userPurchases?.purchases || [] });
   } catch (error) {
-    res.status(500).json({ message: "Database error.", error });
+    console.error('Error en purchase-history:', error);
+    res.status(500).json({ message: "Database error." });
   }
 });
 

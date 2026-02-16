@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
+import { API_ENDPOINTS } from "@/config/api";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
@@ -35,7 +36,7 @@ export default function RegisterPage() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      const res = await fetch('http://localhost:3001/api/users/register', {
+      const res = await fetch(API_ENDPOINTS.AUTH.REGISTER, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

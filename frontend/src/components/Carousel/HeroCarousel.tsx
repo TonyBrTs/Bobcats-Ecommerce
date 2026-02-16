@@ -5,21 +5,22 @@ import "keen-slider/keen-slider.min.css"
 import { useKeenSlider } from "keen-slider/react"
 import { useEffect, useRef, useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { getImageUrl } from "@/config/api";
 
 // Component for displaying a carousel of images with titles and locations.
 const slides = [
   {
-    image: "http://localhost:3001/Carousel/carousel-1.png",
+    image: getImageUrl("/Carousel/carousel-1.png"),
     title: "AVENTURA AL AIRE LIBRE",
     location: "COSTA RICA",
   },
   {
-    image: "http://localhost:3001/Carousel/carousel-2.png",
+    image: getImageUrl("/Carousel/carousel-2.png"),
     title: "EXPLORACIÓN EN RÍO",
     location: "AGUAS TROPICALES",
   },
   {
-    image: "http://localhost:3001/Carousel/carousel-3.png",
+    image: getImageUrl("/Carousel/carousel-3.png"),
     title: "SENDEROS DE MONTAÑA",
     location: "RUTAS ESCÉNICAS",
   },

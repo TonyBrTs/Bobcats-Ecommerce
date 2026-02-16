@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Product } from "@/types/Product";
 import ProductCard from "@/components/Products/ProductCard";
+import { API_ENDPOINTS } from "@/config/api";
 
 /**
  * ProductosPage component for displaying a list of products based on selected category and subcategory.
@@ -23,7 +24,7 @@ export default function ProductosPage() {
 
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://localhost:3001/api/products");
+        const res = await fetch(API_ENDPOINTS.PRODUCTS);
         const data: Product[] = await res.json();
 
         const filtered = data.filter((product) => {

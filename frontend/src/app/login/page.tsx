@@ -6,6 +6,7 @@ import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 
 import { getUserCart } from "@/utils/cart";
+import { API_ENDPOINTS } from "@/config/api";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -36,7 +37,7 @@ export default function LoginPage() {
 
     if (Object.keys(newErrors).length === 0) {
       try {
-        const res = await fetch("http://localhost:3001/api/users/login", {
+        const res = await fetch(API_ENDPOINTS.AUTH.LOGIN, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

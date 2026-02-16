@@ -1,5 +1,6 @@
 // ./utils/favorites.tsx
-import { getCurrentUser } from "./auth";
+import { getCurrentUser, getAuthToken } from "./auth";
+import { API_ENDPOINTS } from "@/config/api";
 
 /**
  * Updates the user's favorites in the backend.
@@ -10,9 +11,17 @@ export async function updateUserFavorites(favorites: any[]) {
   const user = getCurrentUser();
   if (!user) return;
 
-  const res = await fetch("http://localhost:3001/api/favorite/update-favorites", {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error('No autenticado');
+  }
+
+  const res = await fetch(API_ENDPOINTS.FAVORITES.UPDATE, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
     body: JSON.stringify({
       username: user.username,
       favorites,
@@ -28,7 +37,16 @@ export async function updateUserFavorites(favorites: any[]) {
  * @returns Promise with the favorites array.
  */
 export async function getUserFavorites(username: string) {
-  const res = await fetch(`http://localhost:3001/api/favorite/get-favorites?username=${encodeURIComponent(username)}`);
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error('No autenticado');
+  }
+
+  const res = await fetch(`${API_ENDPOINTS.FAVORITES.GET}?username=${encodeURIComponent(username)}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
   const data = await res.json();
   return data.favorites || [];
 }

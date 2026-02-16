@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     res.json(products)
   } catch (error) {
     console.error('Error fetching products from MongoDB:', error)
-    res.status(500).json({ error: 'Internal server error' })
+    res.status(500).json({ message: 'Error al obtener productos' })
   }
 })
 

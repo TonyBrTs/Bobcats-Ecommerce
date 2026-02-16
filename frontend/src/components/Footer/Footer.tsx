@@ -5,6 +5,7 @@ import { Instagram, Twitter, Music2, Minus, Plus } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link" 
 import AccordionContent from "./AccordionContent"
+import { getImageUrl } from "@/config/api";
 
 // Footer component for the website.
 const Footer = () => {
@@ -89,7 +90,7 @@ const Footer = () => {
           <Twitter className="w-8 h-8 text-white hover:text-green-200 cursor-pointer" />
         </div>
         <Image
-          src="http://localhost:3001/Logo_Blanco_Transparente.png"
+          src={getImageUrl("/Logo_Blanco_Transparente.png")}
           alt="Logo Blanco"
           width={80}
           height={80}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Product } from "@/types/Product";
+import { API_ENDPOINTS } from "@/config/api";
 
 type SearchDrawerProps = {
   isOpen: boolean;
@@ -26,7 +27,7 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
   //  Cargar productos solo una vez al abrir
   useEffect(() => {
     if (isOpen && allProducts.length === 0) {
-      fetch("http://localhost:3001/api/products")
+      fetch(API_ENDPOINTS.PRODUCTS)
         .then((res) => res.json())
         .then((data) => setAllProducts(data))
         .catch((err) => console.error("Error al cargar productos:", err));

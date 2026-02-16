@@ -1,13 +1,22 @@
-// ./utils/favorites.tsx
-import { getCurrentUser } from "./auth";
+// ./utils/purchase-history.tsx
+import { getCurrentUser, getAuthToken } from "./auth";
+import { API_ENDPOINTS } from "@/config/api";
 
 export async function addUserPurchase(purchase: any) {
   const user = getCurrentUser();
   if (!user) return;
 
-  const res = await fetch("http://localhost:3001/api/purchase-history/add-purchase", {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error('No autenticado');
+  }
+
+  const res = await fetch(API_ENDPOINTS.PURCHASE_HISTORY.ADD, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
     body: JSON.stringify({
       username: user.username,
       purchase,
@@ -18,7 +27,16 @@ export async function addUserPurchase(purchase: any) {
 }
 
 export async function getUserPurchaseHistory(username: string) {
-  const res = await fetch(`http://localhost:3001/api/purchase-history/get-purchase-history?username=${encodeURIComponent(username)}`);
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error('No autenticado');
+  }
+
+  const res = await fetch(`${API_ENDPOINTS.PURCHASE_HISTORY.GET}?username=${encodeURIComponent(username)}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
   const data = await res.json();
   return data.purchases || [];
 }

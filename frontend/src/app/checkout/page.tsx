@@ -8,6 +8,7 @@ import Toast from "@/components/Toast";
 import { updateUserCart } from "@/utils/cart";
 import { addUserPurchase } from "@/utils/purchase-history";
 import { useRouter } from "next/navigation";
+import { API_ENDPOINTS } from "@/config/api";
 
 const provinciasYCantones: { [key: string]: string[] } = {
   "San José": [
@@ -226,7 +227,7 @@ export default function CheckoutPage() {
     }
 
     try {
-      const res = await fetch("https://bobcats-api.onrender.com/api/payment", {
+      const res = await fetch(API_ENDPOINTS.PAYMENT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

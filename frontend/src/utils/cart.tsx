@@ -1,4 +1,5 @@
-import { getCurrentUser } from "./auth";
+import { getCurrentUser, getAuthToken } from "./auth";
+import { API_ENDPOINTS } from "@/config/api";
 
 /**
  * Updates the user's cart in the backend.
@@ -13,9 +14,17 @@ export async function updateUserCart(cart: any[]) {
   }
 
   username = user.username
-  const res = await fetch('http://localhost:3001/api/cart/update-cart', {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error('No autenticado');
+  }
+
+  const res = await fetch(API_ENDPOINTS.CART.UPDATE, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
     body: JSON.stringify({ username, cart }),
   });
   return res.json();
@@ -27,7 +36,16 @@ export async function updateUserCart(cart: any[]) {
  * @returns Promise with the cart array.
  */
 export async function getUserCart(username: string) {
-  const res = await fetch(`http://localhost:3001/api/cart/get-cart?username=${encodeURIComponent(username)}`);
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error('No autenticado');
+  }
+
+  const res = await fetch(`${API_ENDPOINTS.CART.GET}?username=${encodeURIComponent(username)}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
   const data = await res.json();
   return data.cart || [];
 }

@@ -1,13 +1,25 @@
-require('dotenv').config();
+// Validar variables de entorno antes de continuar
+require('./config/env');
+
 const express = require('express');
 const cors = require('cors');
 const path = require("path");
+const config = require('./config/env');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = config.port;
+
+// Configuración de CORS
+const corsOptions = {
+  origin: config.frontendUrl,
+  credentials: true,
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
 
 // Primero: Middlewares globales
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 

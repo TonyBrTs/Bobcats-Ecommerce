@@ -10,6 +10,7 @@ import UserMenu from "./UserMenu";
 import FavoriteDrawer from "./FavoriteDrawer";
 import { getCurrentUser } from "@/utils/auth";
 import { useRouter } from "next/navigation";
+import { getImageUrl } from "@/config/api";
 
 /**
  * Navbar component for the website.
@@ -100,7 +101,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2">
               <img
-                src="http://localhost:3001/Logo_Verde_Trasparente.png"
+                src={getImageUrl("/Logo_Verde_Trasparente.png")}
                 alt="Logo"
                 className="w-16 lg:w-17 h-auto object-contain"
               />

@@ -4,7 +4,8 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 const clientPromise = require('../services/mongodb')
-const SECRET_KEY = process.env.JWT_SECRET
+const config = require('../config/env')
+const SECRET_KEY = config.jwtSecret
 
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body
@@ -54,7 +55,8 @@ router.post('/register', async (req, res) => {
 
     res.status(201).json({ message: 'Usuario registrado exitosamente', user: { id: newUserId, username, email } });
   } catch (error) {
-    res.status(500).json({ message: 'Error en la base de datos', error });
+    console.error('Error en registro:', error);
+    res.status(500).json({ message: 'Error en la base de datos' });
   }
 });
 
@@ -85,7 +87,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Credenciales inválidas' })
     }
 
-    const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '5m' })
+    const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: config.jwtExpiresIn })
 
     res.json({
       message: 'Login exitoso',
@@ -93,7 +95,8 @@ router.post('/login', async (req, res) => {
       user: { id: user.id, username: user.username, email: user.email }
     })
   } catch (error) {
-    res.status(500).json({ message: 'Error en la base de datos', error });
+    console.error('Error en registro:', error);
+    res.status(500).json({ message: 'Error en la base de datos' });
   }
 })
 

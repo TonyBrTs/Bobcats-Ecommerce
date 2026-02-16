@@ -8,6 +8,7 @@ import { Heart } from "lucide-react";
 import { updateUserCart } from "@/utils/cart";
 import { getCurrentUser } from "@/utils/auth";
 import { getUserFavorites, updateUserFavorites } from "@/utils/favorites";
+import { API_ENDPOINTS } from "@/config/api";
 
 export default function ProductDetail() {
   const { productId } = useParams();
@@ -90,7 +91,7 @@ export default function ProductDetail() {
 
       try {
         const id = Array.isArray(productId) ? productId[0] : productId;
-        const res = await fetch("http://localhost:3001/api/products");
+        const res = await fetch(API_ENDPOINTS.PRODUCTS);
         const data: Product[] = await res.json();
 
         const found = data.find((p) => p.id === parseInt(id));

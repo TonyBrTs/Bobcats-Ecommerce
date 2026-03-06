@@ -68,7 +68,7 @@ export default function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClo
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black/30 z-40 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/30 z-40 transition-opacity duration-300 cursor-pointer ${
           isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
         onClick={onClose}

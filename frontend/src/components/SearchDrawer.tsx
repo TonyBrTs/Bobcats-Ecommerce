@@ -57,7 +57,7 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-start pt-6">
-      <div className="absolute inset-0 bg-transparent" onClick={onClose} />
+      <div className="absolute inset-0 bg-transparent cursor-pointer" onClick={onClose} />
       <div className="relative bg-surface-elevated rounded-md shadow-md dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)] w-[90%] max-w-2xl p-4 flex flex-col gap-4 z-10 border border-transparent dark:border-border-custom transition-colors duration-300">
         <div className="flex items-center gap-2">
           <input

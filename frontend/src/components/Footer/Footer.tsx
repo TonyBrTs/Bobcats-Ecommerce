@@ -20,13 +20,13 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-12 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8">
           {/* Logo & Description */}
-          <div className="md:col-span-1 flex flex-col items-start">
+          <div className="md:col-span-1 flex flex-col items-center text-center">
             <Image
               src={getImageUrl('/Logo_Blanco_Transparente.png')}
               alt="Bobcats Logo"
               width={80}
               height={80}
-              className="h-auto w-20 object-contain mb-4"
+              className="h-auto w-30 object-contain mb-2"
             />
             <p className="text-sm text-white/60 leading-relaxed">
               Tu tienda de confianza con los mejores productos y la mejor atención.
@@ -39,7 +39,7 @@ const Footer = () => {
               className="flex justify-between items-center md:block cursor-pointer md:cursor-default"
               onClick={() => toggleSection('NAV')}
             >
-              <h4 className="text-xs font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">
+              <h4 className="text-s font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">
                 Navegación
               </h4>
               <span className="md:hidden text-white/40">
@@ -72,7 +72,7 @@ const Footer = () => {
               className="flex justify-between items-center md:block cursor-pointer md:cursor-default"
               onClick={() => toggleSection('AYUDA')}
             >
-              <h4 className="text-xs font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">
+              <h4 className="text-s font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">
                 Ayuda
               </h4>
               <span className="md:hidden text-white/40">
@@ -105,7 +105,7 @@ const Footer = () => {
               className="flex justify-between items-center md:block cursor-pointer md:cursor-default"
               onClick={() => toggleSection('CONTACTO')}
             >
-              <h4 className="text-xs font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">
+              <h4 className="text-s font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">
                 Contacto
               </h4>
               <span className="md:hidden text-white/40">
@@ -140,7 +140,7 @@ const Footer = () => {
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-5 flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Copyright */}
-          <p className="text-xs text-white/30 order-2 md:order-1">
+          <p className="text-s text-white/30 order-2 md:order-1">
             © {new Date().getFullYear()} Bobcats. Todos los derechos reservados.
           </p>
 

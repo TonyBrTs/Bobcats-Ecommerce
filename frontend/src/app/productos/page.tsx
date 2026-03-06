@@ -70,7 +70,7 @@ export default function ProductosPage() {
         {products.map((product) => (
           <div
             key={product.id}
-            className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
+            className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 cursor-pointer"
             onClick={() => {
               handleProductClick(product);
             }}

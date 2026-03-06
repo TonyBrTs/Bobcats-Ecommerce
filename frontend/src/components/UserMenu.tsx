@@ -46,7 +46,12 @@ export default function UserMenu() {
         <User className="w-6 h-6 text-text-secondary" />
       </button>
 
-      {open && <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setOpen(false)} />}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/30 z-40 cursor-pointer"
+          onClick={() => setOpen(false)}
+        />
+      )}
 
       {open && user && (
         <div className="absolute right-0 mt-2 w-60 bg-surface-elevated border border-border-custom rounded-xl shadow-xl dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)] z-50 animate-fade-in text-sm overflow-hidden transition-colors duration-300">

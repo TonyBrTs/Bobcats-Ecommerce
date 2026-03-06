@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import type { Product } from "@/types/Product";
-import Image from "next/image";
-import { Heart } from "lucide-react";
-import { getCurrentUser } from "@/utils/auth";
-import { getUserFavorites, updateUserFavorites } from "@/utils/favorites";
+import type { Product } from '@/types/Product';
+import { getCurrentUser } from '@/utils/auth';
+import { getUserFavorites, updateUserFavorites } from '@/utils/favorites';
+import { Heart } from 'lucide-react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 /**
  * ProductCard component for displaying product information in a card format.
@@ -33,9 +33,9 @@ export default function ProductCard(product: Product) {
     const handleFavoritesUpdated = () => {
       fetchFavorites();
     };
-    window.addEventListener("favoritesUpdated", handleFavoritesUpdated);
+    window.addEventListener('favoritesUpdated', handleFavoritesUpdated);
     return () => {
-      window.removeEventListener("favoritesUpdated", handleFavoritesUpdated);
+      window.removeEventListener('favoritesUpdated', handleFavoritesUpdated);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.id]);
@@ -53,18 +53,17 @@ export default function ProductCard(product: Product) {
     setFavorites(updatedFavorites);
     setIsFavorite(!isFavorite);
     await updateUserFavorites(updatedFavorites);
-    window.dispatchEvent(new Event("favoritesUpdated"));
+    window.dispatchEvent(new Event('favoritesUpdated'));
   }
 
-  const hasDiscount =
-    product.originalPrice !== undefined && product.originalPrice > product.price;
+  const hasDiscount = product.originalPrice !== undefined && product.originalPrice > product.price;
 
   const discountPercentage = hasDiscount
     ? Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)
     : 0;
 
   return (
-    <div className="group flex flex-col rounded-lg shadow-md overflow-hidden h-72 cursor-pointer hover:shadow-lg transition-shadow duration-300 ease-in-out relative">
+    <div className="group flex flex-col rounded-lg shadow-md dark:shadow-[0_2px_8px_rgba(0,0,0,0.3)] overflow-hidden h-72 cursor-pointer hover:shadow-lg transition-shadow duration-300 ease-in-out relative bg-surface-elevated border border-transparent dark:border-border-custom">
       {/* Etiqueta de oferta */}
       {hasDiscount && (
         <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded z-10">
@@ -78,7 +77,7 @@ export default function ProductCard(product: Product) {
           <button onClick={toggleFavorite} className="focus:outline-none">
             <Heart
               className={`w-6 h-6 transition-colors ${
-                isFavorite ? "fill-red-500 text-red-500" : "text-gray-400 cursor-pointer"
+                isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400 cursor-pointer'
               }`}
             />
           </button>
@@ -99,20 +98,22 @@ export default function ProductCard(product: Product) {
 
       {/* Información del producto */}
       <div className="p-2 flex flex-col justify-center h-1/2">
-        <h2 className="text-base font-semibold leading-snug line-clamp-2">{product.name}</h2>
+        <h2 className="text-base font-semibold leading-snug line-clamp-2 text-text-primary">
+          {product.name}
+        </h2>
         <div className="mt-1">
           {hasDiscount ? (
             <>
-              <span className="text-lg font-bold text-black">
-                ₡{product.price.toLocaleString("es-CR", { minimumFractionDigits: 2 })}
+              <span className="text-lg font-bold text-text-primary">
+                ₡{product.price.toLocaleString('es-CR', { minimumFractionDigits: 2 })}
               </span>
-              <span className="text-sm text-gray-400 line-through ml-2">
-                ₡{product.originalPrice!.toLocaleString("es-CR", { minimumFractionDigits: 2 })}
+              <span className="text-sm text-text-muted line-through ml-2">
+                ₡{product.originalPrice!.toLocaleString('es-CR', { minimumFractionDigits: 2 })}
               </span>
             </>
           ) : (
-            <span className="text-lg font-bold text-gray-800">
-              ₡{product.price.toLocaleString("es-CR", { minimumFractionDigits: 2 })}
+            <span className="text-lg font-bold text-text-primary">
+              ₡{product.price.toLocaleString('es-CR', { minimumFractionDigits: 2 })}
             </span>
           )}
         </div>

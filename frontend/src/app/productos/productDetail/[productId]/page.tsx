@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useParams } from "next/navigation";
-import type { Product } from "@/types/Product";
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { Heart } from "lucide-react";
-import { updateUserCart } from "@/utils/cart";
-import { getCurrentUser } from "@/utils/auth";
-import { getUserFavorites, updateUserFavorites } from "@/utils/favorites";
-import { API_ENDPOINTS } from "@/config/api";
+import { API_ENDPOINTS } from '@/config/api';
+import type { Product } from '@/types/Product';
+import { getCurrentUser } from '@/utils/auth';
+import { updateUserCart } from '@/utils/cart';
+import { getUserFavorites, updateUserFavorites } from '@/utils/favorites';
+import { Heart } from 'lucide-react';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function ProductDetail() {
   const { productId } = useParams();
@@ -20,24 +20,12 @@ export default function ProductDetail() {
   const [showToast, setShowToast] = useState(false);
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [favorites, setFavorites] = useState<Product[]>([]);
-  const [toastType, setToastType] = useState<"success" | "warning" | "error" | null>(
-    null
-  );
+  const [toastType, setToastType] = useState<'success' | 'warning' | 'error' | null>(null);
 
   async function handleAddToCart(product: Product) {
     const user = await getCurrentUser();
     if (!user) {
-      setToastType("error");
-      setShowToast(true);
-      setTimeout(() => {
-        setShowToast(false);
-        setToastType(null);
-      }, 3000);
-      return
-    }
-
-    if (!selectedColor || !selectedSize) {
-      setToastType("warning");
+      setToastType('error');
       setShowToast(true);
       setTimeout(() => {
         setShowToast(false);
@@ -46,21 +34,31 @@ export default function ProductDetail() {
       return;
     }
 
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    if (!selectedColor || !selectedSize) {
+      setToastType('warning');
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+        setToastType(null);
+      }, 3000);
+      return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const alreadyInCart = cart.some((item: Product) => item.id === product.id);
 
     if (alreadyInCart) {
-      setToastType("warning");
+      setToastType('warning');
     } else {
       cart.push({
         ...product,
         selectedColor,
         selectedSize,
       });
-      localStorage.setItem("cart", JSON.stringify(cart));
-      setToastType("success");
+      localStorage.setItem('cart', JSON.stringify(cart));
+      setToastType('success');
       await updateUserCart(cart);
-      window.dispatchEvent(new Event("cartUpdated"));
+      window.dispatchEvent(new Event('cartUpdated'));
     }
 
     setShowToast(true);
@@ -82,7 +80,7 @@ export default function ProductDetail() {
     setFavorites(updatedFavorites);
     setIsFavorite(!isFavorite);
     await updateUserFavorites(updatedFavorites);
-    window.dispatchEvent(new Event("favoritesUpdated"));
+    window.dispatchEvent(new Event('favoritesUpdated'));
   }
 
   useEffect(() => {
@@ -98,7 +96,7 @@ export default function ProductDetail() {
         setProduct(found || null);
         setImageUrl(found?.imageUrl || null);
       } catch (error) {
-        console.error("Error al obtener producto:", error);
+        console.error('Error al obtener producto:', error);
       } finally {
         setIsLoading(false);
       }
@@ -124,19 +122,19 @@ export default function ProductDetail() {
     const handleFavoritesUpdated = () => {
       fetchFavorites();
     };
-    window.addEventListener("favoritesUpdated", handleFavoritesUpdated);
+    window.addEventListener('favoritesUpdated', handleFavoritesUpdated);
     return () => {
-      window.removeEventListener("favoritesUpdated", handleFavoritesUpdated);
+      window.removeEventListener('favoritesUpdated', handleFavoritesUpdated);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?.id]);
 
   useEffect(() => {
     if (showToast) {
-      console.log("Sonido");
-      const audio = new Audio("/Sounds/success.wav");
+      console.log('Sonido');
+      const audio = new Audio('/Sounds/success.wav');
       audio.volume = 0.5; // volumen opcional
-      audio.play().catch(() => { });
+      audio.play().catch(() => {});
     }
   }, [showToast]);
 
@@ -148,11 +146,9 @@ export default function ProductDetail() {
   }, [selectedColor, product]);
 
   if (isLoading) return <div className="text-center">Cargando...</div>;
-  if (!product)
-    return <div className="text-center">Producto no encontrado</div>;
+  if (!product) return <div className="text-center">Producto no encontrado</div>;
 
-  const hasDiscount =
-    product.originalPrice !== undefined && product.originalPrice > product.price;
+  const hasDiscount = product.originalPrice !== undefined && product.originalPrice > product.price;
 
   const discountPercentage = hasDiscount
     ? Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)
@@ -167,8 +163,9 @@ export default function ProductDetail() {
             className="absolute top-2 right-2 z-10 focus:outline-none"
           >
             <Heart
-              className={`w-8 h-8 transition-colors ${isFavorite ? "fill-red-500 text-red-500" : "text-gray-400"
-                }`}
+              className={`w-8 h-8 transition-colors ${
+                isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'
+              }`}
             />
           </button>
         )}
@@ -189,17 +186,17 @@ export default function ProductDetail() {
         />
       </div>
 
-      <div className="bg-green-100 p-6 rounded-lg shadow-md w-full md:w-1/2">
-        <h1 className="text-2xl font-bold">{product.name}</h1>
-        <p className="mt-4 text-xl">
-          ₡{" "}
-          {product.price.toLocaleString("es-CR", {
+      <div className="bg-surface p-6 rounded-lg shadow-md dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] w-full md:w-1/2 border border-transparent dark:border-border-custom transition-colors duration-300">
+        <h1 className="text-2xl font-bold text-text-primary">{product.name}</h1>
+        <p className="mt-4 text-xl text-text-primary">
+          ₡{' '}
+          {product.price.toLocaleString('es-CR', {
             minimumFractionDigits: 2,
           })}
           {hasDiscount && (
-            <span className="text-sm text-gray-400 line-through ms-2">
-              ₡{" "}
-              {product.originalPrice!.toLocaleString("es-CR", {
+            <span className="text-sm text-text-muted line-through ms-2">
+              ₡{' '}
+              {product.originalPrice!.toLocaleString('es-CR', {
                 minimumFractionDigits: 2,
               })}
             </span>
@@ -208,17 +205,18 @@ export default function ProductDetail() {
 
         {product.colors && product.colors?.length > 0 && (
           <div className="mt-4">
-            <p className="font-medium text-lg">Colores:</p>
+            <p className="font-medium text-lg text-text-primary">Colores:</p>
             <div className="flex items-center space-x-2 mt-2">
               {product.colors.map((color, idx) => (
                 <div
                   key={idx}
                   onClick={() => setSelectedColor(color)}
                   style={{ backgroundColor: color }}
-                  className={`w-8 h-8 rounded-full border-2 cursor-pointer transition-all duration-200 ${selectedColor === color
-                      ? "border-black scale-110"
-                      : "border-gray-300 hover:border-black hover:scale-110"
-                    }`}
+                  className={`w-8 h-8 rounded-full border-2 cursor-pointer transition-all duration-200 ${
+                    selectedColor === color
+                      ? 'border-text-primary scale-110'
+                      : 'border-border-custom hover:border-text-primary hover:scale-110'
+                  }`}
                 />
               ))}
             </div>
@@ -227,16 +225,17 @@ export default function ProductDetail() {
 
         {product.sizes && product.sizes?.length > 0 && (
           <div className="mt-4">
-            <p className="font-medium text-lg">Tallas:</p>
+            <p className="font-medium text-lg text-text-primary">Tallas:</p>
             <div className="flex items-center space-x-2 mt-2">
               {product.sizes.map((size, idx) => (
                 <span
                   key={idx}
                   onClick={() => setSelectedSize(size)}
-                  className={`px-3 py-1 border rounded text-sm cursor-pointer transition-all duration-200 ${selectedSize === size
-                      ? "bg-black text-white"
-                      : "hover:bg-black hover:text-white"
-                    }`}
+                  className={`px-3 py-1 border border-border-custom rounded text-sm cursor-pointer transition-all duration-200 ${
+                    selectedSize === size
+                      ? 'bg-text-primary text-background'
+                      : 'text-text-primary hover:bg-text-primary hover:text-background'
+                  }`}
                 >
                   {size}
                 </span>
@@ -245,11 +244,11 @@ export default function ProductDetail() {
           </div>
         )}
 
-        <p className="mt-4 text-lg">{product.description}</p>
+        <p className="mt-4 text-lg text-text-secondary">{product.description}</p>
 
         <button
           onClick={() => handleAddToCart(product)}
-          className="mt-6 px-6 py-2 bg-white text-black rounded-lg hover:bg-[#ececec] transition duration-200"
+          className="mt-6 px-6 py-2 bg-surface-elevated text-text-primary border border-border-custom rounded-lg hover:bg-surface transition duration-200"
         >
           Agregar al carrito
         </button>
@@ -259,9 +258,10 @@ export default function ProductDetail() {
       <div
         role="alert"
         className={`fixed top-5 left-1/2 z-50 transform transition-all duration-300 ease-out
-          ${showToast && toastType === "success"
-            ? "-translate-x-1/2 translate-y-0 opacity-100"
-            : "-translate-x-1/2 -translate-y-10 opacity-0 pointer-events-none"
+          ${
+            showToast && toastType === 'success'
+              ? '-translate-x-1/2 translate-y-0 opacity-100'
+              : '-translate-x-1/2 -translate-y-10 opacity-0 pointer-events-none'
           }`}
       >
         <div className="flex items-center w-full max-w-sm p-4 mb-4 text-[#2C2C2C] bg-[#F1F5F2] border border-[#D4E4D1] rounded-lg shadow-lg text-base">
@@ -280,9 +280,10 @@ export default function ProductDetail() {
       <div
         role="alert"
         className={`fixed top-5 left-1/2 z-50 transform transition-all duration-300 ease-out
-          ${showToast && toastType === "warning"
-            ? "-translate-x-1/2 translate-y-0 opacity-100"
-            : "-translate-x-1/2 -translate-y-10 opacity-0 pointer-events-none"
+          ${
+            showToast && toastType === 'warning'
+              ? '-translate-x-1/2 translate-y-0 opacity-100'
+              : '-translate-x-1/2 -translate-y-10 opacity-0 pointer-events-none'
           }`}
       >
         <div className="flex items-center w-full max-w-sm p-4 mb-4 text-yellow-900 bg-yellow-100 border border-yellow-300 rounded-lg shadow-lg text-base">
@@ -293,8 +294,8 @@ export default function ProductDetail() {
           </div>
           <div className="ms-3 font-medium">
             {selectedColor && selectedSize
-              ? "Este producto ya está en el carrito."
-              : "Debes seleccionar un color y una talla antes de agregar al carrito."}
+              ? 'Este producto ya está en el carrito.'
+              : 'Debes seleccionar un color y una talla antes de agregar al carrito.'}
           </div>
         </div>
       </div>
@@ -303,9 +304,10 @@ export default function ProductDetail() {
       <div
         role="alert"
         className={`fixed top-5 left-1/2 z-50 transform transition-all duration-300 ease-out
-          ${showToast && toastType === "error"
-            ? "-translate-x-1/2 translate-y-0 opacity-100"
-            : "-translate-x-1/2 -translate-y-10 opacity-0 pointer-events-none"
+          ${
+            showToast && toastType === 'error'
+              ? '-translate-x-1/2 translate-y-0 opacity-100'
+              : '-translate-x-1/2 -translate-y-10 opacity-0 pointer-events-none'
           }`}
       >
         <div className="flex items-center w-full max-w-sm p-4 mb-4 text-[#B91C1C] bg-[#FEE2E2] border border-[#FCA5A5] rounded-lg shadow-lg text-base">

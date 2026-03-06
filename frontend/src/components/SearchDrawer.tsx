@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import type { Product } from "@/types/Product";
-import { API_ENDPOINTS } from "@/config/api";
+import { API_ENDPOINTS } from '@/config/api';
+import type { Product } from '@/types/Product';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 type SearchDrawerProps = {
   isOpen: boolean;
@@ -18,9 +18,9 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
 
   //  Evita scroll cuando se abre
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "auto";
+    document.body.style.overflow = isOpen ? 'hidden' : 'auto';
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto';
     };
   }, [isOpen]);
 
@@ -30,19 +30,19 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
       fetch(API_ENDPOINTS.PRODUCTS)
         .then((res) => res.json())
         .then((data) => setAllProducts(data))
-        .catch((err) => console.error("Error al cargar productos:", err));
+        .catch((err) => console.error('Error al cargar productos:', err));
     }
   }, [isOpen]);
 
   //  Filtrar productos
   useEffect(() => {
-    if (searchQuery.trim() === "") {
+    if (searchQuery.trim() === '') {
       setFilteredProducts([]);
       return;
     }
 
     const results = allProducts.filter((product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
     setFilteredProducts(results);
@@ -58,17 +58,20 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-start pt-6">
       <div className="absolute inset-0 bg-transparent" onClick={onClose} />
-      <div className="relative bg-white rounded-md shadow-md w-[90%] max-w-2xl p-4 flex flex-col gap-4 z-10">
+      <div className="relative bg-surface-elevated rounded-md shadow-md dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)] w-[90%] max-w-2xl p-4 flex flex-col gap-4 z-10 border border-transparent dark:border-border-custom transition-colors duration-300">
         <div className="flex items-center gap-2">
           <input
             autoFocus
             type="text"
             placeholder="Buscar producto..."
-            className="flex-grow p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4C6B37]"
+            className="flex-grow p-2 border border-input-border rounded-md bg-input-bg text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent transition-colors duration-300"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <button onClick={onClose} className="text-gray-600 hover:text-gray-800">
+          <button
+            onClick={onClose}
+            className="text-text-secondary hover:text-text-primary transition-colors"
+          >
             ✖
           </button>
         </div>
@@ -78,7 +81,7 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
             {filteredProducts.map((product) => (
               <li
                 key={product.id}
-                className="flex items-center gap-2 p-2 border-b cursor-pointer hover:bg-gray-100 transition"
+                className="flex items-center gap-2 p-2 border-b border-border-custom cursor-pointer hover:bg-surface transition"
                 onClick={() => handleProductClick(product)}
               >
                 <img
@@ -87,22 +90,22 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
                   className="w-12 h-12 object-cover rounded"
                 />
                 <div>
-                  <h4 className="font-semibold">{product.name}</h4>
-                  <p className="text-gray-500 text-sm">{product.description}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-green-600 font-medium">
-                        ₡{product.price.toLocaleString("es-CR")}
+                  <h4 className="font-semibold text-text-primary">{product.name}</h4>
+                  <p className="text-text-muted text-sm">{product.description}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-accent font-medium">
+                      ₡{product.price.toLocaleString('es-CR')}
+                    </span>
+                    {product.originalPrice && product.originalPrice > product.price && (
+                      <span className="text-red-600 dark:text-red-400 font-semibold text-sm">
+                        -
+                        {Math.round(
+                          ((product.originalPrice - product.price) / product.originalPrice) * 100,
+                        )}
+                        % off
                       </span>
-                      {product.originalPrice && product.originalPrice > product.price && (
-                        <span className="text-red-600 font-semibold text-sm">
-                          -
-                          {Math.round(
-                            ((product.originalPrice - product.price) / product.originalPrice) * 100
-                          )}
-                          % off
-                        </span>
-                      )}
-                    </div>
+                    )}
+                  </div>
                 </div>
               </li>
             ))}

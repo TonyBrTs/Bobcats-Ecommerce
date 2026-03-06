@@ -1,19 +1,18 @@
-"use client";
+'use client';
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import type { Product } from "@/types/Product";
-import ProductCard from "@/components/Products/ProductCard";
-import { API_ENDPOINTS } from "@/config/api";
+import ProductCard from '@/components/Products/ProductCard';
+import { API_ENDPOINTS } from '@/config/api';
+import type { Product } from '@/types/Product';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 /**
  * ProductosPage component for displaying a list of products based on selected category and subcategory.
  */
 export default function ProductosPage() {
   const searchParams = useSearchParams();
-  const category = searchParams.get("category");
-  const subcategory = searchParams.get("subcategory");
+  const category = searchParams.get('category');
+  const subcategory = searchParams.get('subcategory');
 
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -25,9 +24,12 @@ export default function ProductosPage() {
     const fetchProducts = async () => {
       try {
         const res = await fetch(API_ENDPOINTS.PRODUCTS);
-        const data: Product[] = await res.json();
+        const data = await res.json();
 
-        const filtered = data.filter((product) => {
+        // Ensure data is an array before filtering
+        const productsList = Array.isArray(data) ? data : [];
+
+        const filtered = productsList.filter((product: Product) => {
           return (
             product.categories?.includes(category) &&
             (!subcategory || product.subcategories?.includes(subcategory))
@@ -36,7 +38,7 @@ export default function ProductosPage() {
 
         setProducts(filtered);
       } catch (error) {
-        console.error("Error al cargar productos:", error);
+        console.error('Error al cargar productos:', error);
       }
     };
 
@@ -50,21 +52,19 @@ export default function ProductosPage() {
 
   const formattedCategory = category
     ? category.charAt(0).toUpperCase() + category.slice(1)
-    : "Productos";
+    : 'Productos';
   const formattedSubcategory =
     subcategory && subcategory.length > 0
       ? subcategory.charAt(0).toUpperCase() + subcategory.slice(1)
-      : "";
+      : '';
 
   return (
     <div className="p-8">
-      <h2 className="text-3xl font-bold text-center">
-        {category ? `Productos de ${formattedCategory}` : "Productos"}
+      <h2 className="text-3xl font-bold text-center text-text-primary">
+        {category ? `Productos de ${formattedCategory}` : 'Productos'}
       </h2>
-      {subcategory && subcategory.trim() !== "" && (
-        <h3 className="text-xl font-medium text-center mt-2">
-          {`${formattedSubcategory}`}
-        </h3>
+      {subcategory && subcategory.trim() !== '' && (
+        <h3 className="text-xl font-medium text-center mt-2 text-text-secondary">{`${formattedSubcategory}`}</h3>
       )}
       <div className="flex flex-wrap gap-4 justify-center mt-10">
         {products.map((product) => (

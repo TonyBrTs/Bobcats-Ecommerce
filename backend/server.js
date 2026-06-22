@@ -13,7 +13,7 @@ const PORT = config.port;
 
 // Configuración de CORS
 const corsOptions = {
-  origin: config.frontendUrl,
+  origin: config.frontendUrl, // Toma la URL desde process.env.FRONTEND_URL
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],

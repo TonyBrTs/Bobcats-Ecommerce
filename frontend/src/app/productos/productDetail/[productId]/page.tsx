@@ -179,8 +179,8 @@ export default function ProductDetail() {
         <Image
           src={imageUrl || product.imageUrl}
           alt={product.name}
-          layout="fill"
-          objectFit="contain"
+          fill
+          style={{ objectFit: 'contain' }}
           className="w-full"
           unoptimized
         />

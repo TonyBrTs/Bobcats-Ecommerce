@@ -89,8 +89,8 @@ export default function ProductCard(product: Product) {
         <Image
           src={product.imageUrl}
           alt={product.name}
-          layout="fill"
-          objectFit="contain"
+          fill
+          style={{ objectFit: 'contain' }}
           className="w-full transition-transform duration-300 ease-in-out group-hover:scale-95"
           unoptimized
         />

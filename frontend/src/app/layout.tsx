@@ -2,6 +2,7 @@ import Navbar from '@/components/Navbar';
 import { ThemeProvider } from '@/context/ThemeContext';
 import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
+import { Suspense } from 'react';
 import Footer from '../components/Footer/Footer';
 import './globals.css';
 
@@ -43,7 +44,9 @@ export default function RootLayout({
       </head>
       <body className="antialiased min-h-screen flex flex-col bg-background text-foreground" suppressHydrationWarning>
         <ThemeProvider>
-          <Navbar />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Navbar />
+          </Suspense>
           <main className="flex-grow">{children}</main>
           <Footer />
         </ThemeProvider>

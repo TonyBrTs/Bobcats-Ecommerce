@@ -4,12 +4,9 @@ import ProductCard from '@/components/Products/ProductCard';
 import { API_ENDPOINTS } from '@/config/api';
 import type { Product } from '@/types/Product';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
-/**
- * ProductosPage component for displaying a list of products based on selected category and subcategory.
- */
-export default function ProductosPage() {
+function ProductosContent() {
   const searchParams = useSearchParams();
   const category = searchParams.get('category');
   const subcategory = searchParams.get('subcategory');
@@ -80,5 +77,16 @@ export default function ProductosPage() {
         ))}
       </div>
     </div>
+  );
+}
+
+/**
+ * ProductosPage component for displaying a list of products based on selected category and subcategory.
+ */
+export default function ProductosPage() {
+  return (
+    <Suspense fallback={<div className="text-center p-8">Cargando productos...</div>}>
+      <ProductosContent />
+    </Suspense>
   );
 }

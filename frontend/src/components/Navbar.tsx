@@ -109,7 +109,13 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2">
-              <img src={logoSrc} alt="Logo" className="w-16 lg:w-17 h-auto object-contain" />
+              <img 
+                src={logoSrc} 
+                alt="Logo" 
+                className={`h-auto object-contain transition-all ${
+                  theme === 'dark' ? 'w-24 lg:w-28' : 'w-16 lg:w-20'
+                }`} 
+              />
             </Link>
           </div>
 

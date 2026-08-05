@@ -11,12 +11,14 @@ const logger = require("../utils/logger");
 
 /**
  * POST /api/cart/update-cart
- * Synchronizes and updates the shopping cart for a user.
+ * Synchronizes and updates the shopping cart for the authenticated user.
  */
 router.post('/update-cart', authenticateToken, async (req, res) => {
-  const { username, cart } = req.body;
+  const { cart } = req.body;
+  const username = req.user?.username || req.body.username;
+
   if (!username || !Array.isArray(cart)) {
-    return res.status(400).json({ message: "Username and cart are required." });
+    return res.status(400).json({ message: "Cart array and authenticated user are required." });
   }
 
   try {
@@ -36,12 +38,13 @@ router.post('/update-cart', authenticateToken, async (req, res) => {
 
 /**
  * GET /api/cart/get-cart
- * Retrieves the saved shopping cart for a user.
+ * Retrieves the saved shopping cart for the authenticated user.
  */
 router.get('/get-cart', authenticateToken, async (req, res) => {
-  const username = req.query.username;
+  const username = req.user?.username || req.query.username;
+
   if (!username) {
-    return res.status(400).json({ message: "Username is required." });
+    return res.status(400).json({ message: "Authenticated username is required." });
   }
 
   try {

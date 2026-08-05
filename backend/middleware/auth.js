@@ -16,7 +16,9 @@ const config = require("../config/env");
  */
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const headerToken = authHeader && authHeader.split(" ")[1];
+  const cookieToken = req.cookies ? req.cookies.token : null;
+  const token = cookieToken || headerToken;
 
   if (!token) {
     return res.status(401).json({ message: "Token de acceso requerido" });

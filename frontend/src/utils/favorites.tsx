@@ -12,16 +12,17 @@ export async function updateUserFavorites(favorites: any[]) {
   if (!user) return;
 
   const token = getAuthToken();
-  if (!token) {
-    throw new Error('No autenticado');
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
   const res = await fetch(API_ENDPOINTS.FAVORITES.UPDATE, {
     method: "POST",
-    headers: { 
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    },
+    credentials: "include",
+    headers,
     body: JSON.stringify({
       username: user.username,
       favorites,
@@ -38,14 +39,14 @@ export async function updateUserFavorites(favorites: any[]) {
  */
 export async function getUserFavorites(username: string) {
   const token = getAuthToken();
-  if (!token) {
-    throw new Error('No autenticado');
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
   const res = await fetch(`${API_ENDPOINTS.FAVORITES.GET}?username=${encodeURIComponent(username)}`, {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
+    credentials: "include",
+    headers,
   });
   const data = await res.json();
   return data.favorites || [];

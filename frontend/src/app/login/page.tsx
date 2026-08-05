@@ -39,6 +39,7 @@ export default function LoginPage() {
       try {
         const res = await fetch(API_ENDPOINTS.AUTH.LOGIN, {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

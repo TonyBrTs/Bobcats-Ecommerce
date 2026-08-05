@@ -95,7 +95,7 @@ class UserService {
       }
 
       const token = jwt.sign(
-        { id: user.id, email: user.email },
+        { id: user.id, email: user.email, username: user.username },
         config.jwtSecret,
         { expiresIn: config.jwtExpiresIn }
       );

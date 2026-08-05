@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { getCurrentUser } from '@/utils/auth';
+import { API_BASE_URL } from '@/config/api';
 import { LogOut, ReceiptText, Settings, User } from 'lucide-react';
 
 export default function UserMenu() {
@@ -21,7 +22,15 @@ export default function UserMenu() {
     setUser(getCurrentUser());
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch(`${API_BASE_URL}/api/users/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (e) {
+      console.error('Error during logout:', e);
+    }
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('cart');

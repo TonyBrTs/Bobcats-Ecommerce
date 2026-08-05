@@ -8,23 +8,24 @@ import { API_ENDPOINTS } from "@/config/api";
  */
 export async function updateUserCart(cart: any[]) {
   const user = getCurrentUser();
-  let username = '';
   if (!user) {
     return;
   }
 
-  username = user.username
+  const username = user.username;
   const token = getAuthToken();
-  if (!token) {
-    throw new Error('No autenticado');
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   const res = await fetch(API_ENDPOINTS.CART.UPDATE, {
     method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
+    credentials: 'include',
+    headers,
     body: JSON.stringify({ username, cart }),
   });
   return res.json();
@@ -37,14 +38,15 @@ export async function updateUserCart(cart: any[]) {
  */
 export async function getUserCart(username: string) {
   const token = getAuthToken();
-  if (!token) {
-    throw new Error('No autenticado');
+
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   const res = await fetch(`${API_ENDPOINTS.CART.GET}?username=${encodeURIComponent(username)}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
+    credentials: 'include',
+    headers,
   });
   const data = await res.json();
   return data.cart || [];

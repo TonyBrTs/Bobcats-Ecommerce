@@ -81,6 +81,15 @@ router.post("/login", async (req, res) => {
 
   try {
     const result = await userService.loginUser(email, password);
+
+    // Set HttpOnly cookie for XSS protection
+    res.cookie("token", result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     res.json({
       message: "Login exitoso",
       token: result.token,
@@ -92,6 +101,19 @@ router.post("/login", async (req, res) => {
       message: error.message || "Error en la base de datos",
     });
   }
+});
+
+/**
+ * POST /api/users/logout
+ * Clears the HttpOnly authentication cookie.
+ */
+router.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  });
+  res.json({ message: "Logout exitoso" });
 });
 
 module.exports = router;

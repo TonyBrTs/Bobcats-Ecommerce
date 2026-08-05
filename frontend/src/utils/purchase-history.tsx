@@ -17,16 +17,17 @@ export async function addUserPurchase(purchase: any) {
   if (!user) return;
 
   const token = getAuthToken();
-  if (!token) {
-    throw new Error('Not authenticated');
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
   const res = await fetch(API_ENDPOINTS.PURCHASE_HISTORY.ADD, {
     method: "POST",
-    headers: { 
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    },
+    credentials: "include",
+    headers,
     body: JSON.stringify({
       username: user.username,
       purchase,
@@ -44,14 +45,14 @@ export async function addUserPurchase(purchase: any) {
  */
 export async function getUserPurchaseHistory(username: string) {
   const token = getAuthToken();
-  if (!token) {
-    throw new Error('Not authenticated');
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
   const res = await fetch(`${API_ENDPOINTS.PURCHASE_HISTORY.GET}?username=${encodeURIComponent(username)}`, {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
+    credentials: "include",
+    headers,
   });
   const data = await res.json();
   return data.purchases || [];

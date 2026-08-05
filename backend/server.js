@@ -11,6 +11,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const rateLimit = require("express-rate-limit");
+const cookieParser = require("cookie-parser");
 const config = require("./config/env");
 const logger = require("./utils/logger");
 
@@ -57,6 +58,7 @@ const loginLimiter = rateLimit({
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/", apiLimiter);
 

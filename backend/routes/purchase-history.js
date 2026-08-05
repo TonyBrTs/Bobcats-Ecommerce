@@ -14,10 +14,11 @@ const logger = require('../utils/logger');
  * Adds a completed purchase transaction to the user history.
  */
 router.post("/add-purchase", authenticateToken, async (req, res) => {
-  const { username, purchase } = req.body;
+  const { purchase } = req.body;
+  const username = req.user?.username || req.body.username;
 
   if (!username || !purchase) {
-    return res.status(400).json({ message: "Username and purchase data are required." });
+    return res.status(400).json({ message: "Authenticated user and purchase data are required." });
   }
 
   try {
@@ -39,13 +40,13 @@ router.post("/add-purchase", authenticateToken, async (req, res) => {
 
 /**
  * GET /api/purchase-history/get-purchase-history
- * Fetches the complete list of previous purchases recorded for a user.
+ * Fetches the complete list of previous purchases recorded for the authenticated user.
  */
 router.get("/get-purchase-history", authenticateToken, async (req, res) => {
-  const { username } = req.query;
+  const username = req.user?.username || req.query.username;
 
   if (!username) {
-    return res.status(400).json({ message: "Username is required." });
+    return res.status(400).json({ message: "Authenticated username is required." });
   }
 
   try {

@@ -1,8 +1,8 @@
 /**
  * @file server.js
- * @description Punto de entrada principal para el servidor Backend de Bobcats Ecommerce.
- * Configura middlewares globales (CORS, Rate Limiting, JSON Parsing),
- * inicializa el enrutamiento API y maneja errores globales.
+ * @description Main entry point for the Bobcats Ecommerce Backend server.
+ * Configures global middlewares (CORS, Rate Limiting, JSON Parsing),
+ * initializes API routes, and handles global errors.
  */
 
 require("./config/env");

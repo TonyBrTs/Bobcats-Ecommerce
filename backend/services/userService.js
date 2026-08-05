@@ -1,6 +1,6 @@
 /**
  * @file services/userService.js
- * @description Servicio de lógica de negocio para la gestión, registro y autenticación de usuarios.
+ * @description Business logic service for user management, registration, and authentication.
  */
 
 const bcrypt = require("bcryptjs");
@@ -11,12 +11,12 @@ const logger = require("../utils/logger");
 
 class UserService {
   /**
-   * Registra un nuevo usuario en la base de datos.
+   * Registers a new user account into the database.
    * 
-   * @param {string} username - Nombre de usuario.
-   * @param {string} email - Correo electrónico del usuario.
-   * @param {string} password - Contraseña en texto plano.
-   * @returns {Promise<{id: number, username: string, email: string}>} Objeto de usuario registrado.
+   * @param {string} username - Account username.
+   * @param {string} email - User email address.
+   * @param {string} password - Raw unhashed password.
+   * @returns {Promise<{id: number, username: string, email: string}>} Created user object.
    */
   async registerUser(username, email, password) {
     try {
@@ -66,11 +66,11 @@ class UserService {
   }
 
   /**
-   * Autentica un usuario verificando sus credenciales y emite un token JWT.
+   * Authenticates a user by validating credentials and issuing a JWT token.
    * 
-   * @param {string} email - Correo electrónico.
-   * @param {string} password - Contraseña en texto plano.
-   * @returns {Promise<{token: string, user: {id: number, username: string, email: string}}>} Datos de autenticación.
+   * @param {string} email - Account email.
+   * @param {string} password - Raw unhashed password.
+   * @returns {Promise<{token: string, user: {id: number, username: string, email: string}}>} Authentication payload.
    */
   async loginUser(email, password) {
     try {
@@ -116,10 +116,10 @@ class UserService {
   }
 
   /**
-   * Obtiene los datos públicos de un usuario por su ID.
+   * Retrieves public user details by user ID.
    * 
-   * @param {number} userId - ID del usuario.
-   * @returns {Promise<{id: number, username: string, email: string} | null>} Objeto de usuario o null.
+   * @param {number} userId - User ID.
+   * @returns {Promise<{id: number, username: string, email: string} | null>} User object or null.
    */
   async getUserById(userId) {
     try {

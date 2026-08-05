@@ -1,18 +1,18 @@
 /**
  * @file middleware/errorHandler.js
- * @description Middleware centralizado para el manejo de errores.
- * Captura las excepciones de la aplicación y genera respuestas JSON formateadas.
+ * @description Centralized error handling middleware.
+ * Catches application exceptions and formats standardized JSON error responses.
  */
 
 const logger = require("../utils/logger");
 
 /**
- * Manejador global de excepciones para Express.
+ * Global exception handler for Express.
  * 
- * @param {Error} err - Objeto de error capturado.
- * @param {import('express').Request} req - Objeto de solicitud Express.
- * @param {import('express').Response} res - Objeto de respuesta Express.
- * @param {import('express').NextFunction} next - Función de continuación.
+ * @param {Error} err - Caught error object.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @param {import('express').NextFunction} next - Express next middleware callback.
  */
 const errorHandler = (err, req, res, next) => {
   logger.error("Error capturado:", {

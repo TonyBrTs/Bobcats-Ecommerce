@@ -1,7 +1,7 @@
 /**
  * @file services/mongodb.js
- * @description Conexión y gestión del cliente de MongoDB.
- * Exporta una Promesa reutilizable de la conexión a la base de datos MongoDB Atlas.
+ * @description MongoDB client connection management module.
+ * Exports a reusable Promise resolving to the MongoDB Atlas database client connection.
  */
 
 const { MongoClient } = require("mongodb");

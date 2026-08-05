@@ -1,12 +1,21 @@
-// components/Toast.tsx
 "use client";
 
+/**
+ * Props definition for the Toast alert component.
+ */
 type ToastProps = {
   show: boolean;
   type: "success" | "warning" | "error";
   message: string;
 };
 
+/**
+ * Toast notification banner component.
+ * Displays floating notification messages for success, warning, or error events.
+ * 
+ * @param props - Toast properties (`show`, `type`, `message`).
+ * @returns JSX element containing the animated Toast banner.
+ */
 export default function Toast({ show, type, message }: ToastProps) {
   const styles = {
     success: {

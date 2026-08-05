@@ -1,6 +1,6 @@
 /**
  * @file routes/auth.js
- * @description Endpoints de la API para registro e inicio de sesión de usuarios.
+ * @description API endpoints for user registration and authentication.
  */
 
 require("dotenv").config();
@@ -11,7 +11,7 @@ const userService = require("../services/userService");
 
 /**
  * POST /api/users/register
- * Registra un nuevo usuario en el sistema previa validación de credenciales.
+ * Registers a new user account after validating credentials.
  */
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
@@ -53,7 +53,7 @@ router.post("/register", async (req, res) => {
 
 /**
  * POST /api/users/login
- * Autentica un usuario y retorna un token JWT válido.
+ * Authenticates a user and returns a valid JWT token.
  */
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;

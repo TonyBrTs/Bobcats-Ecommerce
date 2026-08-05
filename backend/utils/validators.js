@@ -1,6 +1,6 @@
 /**
  * @file utils/validators.js
- * @description Funciones de validación para correo, nombre de usuario y fortaleza de contraseñas.
+ * @description Validation functions for email, username, and password strength requirements.
  */
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -9,9 +9,9 @@ const passwordRegex =
   /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d _\-!@#$%^&*(),.?":{}|<>]{8,}$/;
 
 /**
- * Valida un email
- * @param {string} email - Email a validar
- * @returns {{valid: boolean, message?: string}}
+ * Validates an email address format and presence.
+ * @param {string} email - Email address to validate.
+ * @returns {{valid: boolean, message?: string}} Validation result payload.
  */
 exports.validateEmail = (email) => {
   if (!email) {

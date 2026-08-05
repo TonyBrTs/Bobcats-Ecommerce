@@ -1,7 +1,7 @@
 /**
  * @file utils/logger.js
- * @description Sistema centralizado de registro de eventos (Logging) usando Winston.
- * Almacena logs formateados en consola (desarrollo) y en archivos rotativos (producción).
+ * @description Centralized Logging system powered by Winston.
+ * Stores formatted logs in console (development) and rotating log files (production).
  */
 
 const winston = require("winston");
@@ -48,7 +48,7 @@ const fileFormat = winston.format.combine(
 );
 
 /**
- * Instancia global del Logger configurada para el sistema.
+ * Configured global Logger instance for the application.
  */
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || (config.nodeEnv === "production" ? "info" : "debug"),

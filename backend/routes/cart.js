@@ -1,6 +1,6 @@
 /**
  * @file routes/cart.js
- * @description Endpoints para sincronizar y obtener el carrito de compras del usuario.
+ * @description Endpoints for synchronizing and retrieving user shopping cart state.
  */
 
 const express = require("express");
@@ -11,7 +11,7 @@ const logger = require("../utils/logger");
 
 /**
  * POST /api/cart/update-cart
- * Sincroniza y actualiza el carrito de compras de un usuario.
+ * Synchronizes and updates the shopping cart for a user.
  */
 router.post('/update-cart', authenticateToken, async (req, res) => {
   const { username, cart } = req.body;
@@ -36,7 +36,7 @@ router.post('/update-cart', authenticateToken, async (req, res) => {
 
 /**
  * GET /api/cart/get-cart
- * Obtiene el carrito de compras guardado del usuario.
+ * Retrieves the saved shopping cart for a user.
  */
 router.get('/get-cart', authenticateToken, async (req, res) => {
   const username = req.query.username;

@@ -1,6 +1,6 @@
 /**
  * @file routes/purchase-history.js
- * @description Endpoints para registrar y obtener el historial de compras finalizadas del usuario.
+ * @description Endpoints for recording and retrieving completed user purchases.
  */
 
 const express = require('express');
@@ -11,7 +11,7 @@ const logger = require('../utils/logger');
 
 /**
  * POST /api/purchase-history/add-purchase
- * Registra una nueva compra en el historial del usuario.
+ * Adds a completed purchase transaction to the user history.
  */
 router.post("/add-purchase", authenticateToken, async (req, res) => {
   const { username, purchase } = req.body;
@@ -39,7 +39,7 @@ router.post("/add-purchase", authenticateToken, async (req, res) => {
 
 /**
  * GET /api/purchase-history/get-purchase-history
- * Obtiene la lista completa de compras pasadas registradas por el usuario.
+ * Fetches the complete list of previous purchases recorded for a user.
  */
 router.get("/get-purchase-history", authenticateToken, async (req, res) => {
   const { username } = req.query;

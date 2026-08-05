@@ -1,6 +1,6 @@
 /**
  * @file routes/products.js
- * @description Rutas de la API para la gestión y consulta del catálogo de productos.
+ * @description API endpoints for managing and querying the product catalog.
  */
 
 const express = require('express');
@@ -10,7 +10,7 @@ const logger = require('../utils/logger');
 
 /**
  * GET /api/products
- * Obtiene la lista completa de productos desde la base de datos MongoDB.
+ * Fetches the complete list of products from MongoDB database.
  */
 router.get('/', async (req, res) => {
   try {

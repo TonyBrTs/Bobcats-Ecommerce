@@ -1,18 +1,18 @@
 /**
  * @file middleware/auth.js
- * @description Middleware de autenticación JWT.
- * Verifica la validez del token recibido en los encabezados HTTP antes de permitir el acceso a rutas protegidas.
+ * @description JWT authentication middleware.
+ * Verifies the validity of the bearer token in HTTP headers before granting access to protected routes.
  */
 
 const jwt = require("jsonwebtoken");
 const config = require("../config/env");
 
 /**
- * Verifica la validez del token JWT presente en el header `Authorization`.
+ * Validates the JWT token present in the `Authorization` header.
  * 
- * @param {import('express').Request} req - Objeto de solicitud Express.
- * @param {import('express').Response} res - Objeto de respuesta Express.
- * @param {import('express').NextFunction} next - Función para continuar al siguiente middleware.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @param {import('express').NextFunction} next - Express next middleware callback.
  */
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];

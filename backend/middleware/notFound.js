@@ -1,14 +1,14 @@
 /**
  * @file middleware/notFound.js
- * @description Middleware para capturar y procesar solicitudes a rutas no existentes (HTTP 404).
+ * @description Middleware for catching and processing 404 Not Found requests.
  */
 
 /**
- * Genera un error 404 para las rutas que no coinciden con ningún endpoint registrado.
+ * Generates a 404 error for routes that do not match any registered endpoint.
  * 
- * @param {import('express').Request} req - Objeto de solicitud Express.
- * @param {import('express').Response} res - Objeto de respuesta Express.
- * @param {import('express').NextFunction} next - Función para pasar el error al errorHandler.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @param {import('express').NextFunction} next - Express next middleware callback.
  */
 const notFound = (req, res, next) => {
   const error = new Error(`Ruta no encontrada - ${req.originalUrl}`);

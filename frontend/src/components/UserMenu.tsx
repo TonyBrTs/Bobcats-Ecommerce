@@ -59,7 +59,10 @@ export default function UserMenu() {
             <p className="font-semibold truncate">{user.username}</p>
           </div>
           <button
-            onClick={() => router.push('/profile')}
+            onClick={() => {
+              setOpen(false);
+              router.push('/profile');
+            }}
             className="flex items-center gap-2 w-full text-left px-4 py-2 text-text-primary hover:bg-surface transition cursor-pointer"
           >
             <User className="w-4 h-4" />
@@ -67,7 +70,10 @@ export default function UserMenu() {
           </button>
 
           <button
-            onClick={() => router.push('/purchase-history')}
+            onClick={() => {
+              setOpen(false);
+              router.push('/purchase-history');
+            }}
             className="flex items-center gap-2 w-full text-left px-4 py-2 text-text-primary hover:bg-surface transition cursor-pointer"
           >
             <ReceiptText className="w-4 h-4" />
@@ -75,7 +81,10 @@ export default function UserMenu() {
           </button>
 
           <button
-            onClick={() => router.push('/settings')}
+            onClick={() => {
+              setOpen(false);
+              router.push('/settings');
+            }}
             className="flex items-center gap-2 w-full text-left px-4 py-2 text-text-primary hover:bg-surface transition cursor-pointer"
           >
             <Settings className="w-4 h-4" />

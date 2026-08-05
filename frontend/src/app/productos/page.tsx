@@ -12,13 +12,13 @@ function ProductosContent() {
   const subcategory = searchParams.get('subcategory');
 
   const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const router = useRouter();
 
   useEffect(() => {
-    if (!category) return;
-
     const fetchProducts = async () => {
+      setIsLoading(true);
       try {
         const res = await fetch(API_ENDPOINTS.PRODUCTS);
         const data = await res.json();
@@ -26,16 +26,20 @@ function ProductosContent() {
         // Ensure data is an array before filtering
         const productsList = Array.isArray(data) ? data : [];
 
-        const filtered = productsList.filter((product: Product) => {
-          return (
-            product.categories?.includes(category) &&
-            (!subcategory || product.subcategories?.includes(subcategory))
-          );
-        });
+        const filtered = category
+          ? productsList.filter((product: Product) => {
+              return (
+                product.categories?.includes(category) &&
+                (!subcategory || product.subcategories?.includes(subcategory))
+              );
+            })
+          : productsList;
 
         setProducts(filtered);
       } catch (error) {
         console.error('Error al cargar productos:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -44,7 +48,7 @@ function ProductosContent() {
 
   // Function to handle product click and navigate to the product detail page
   function handleProductClick(product: Product) {
-    router.push(`productos/productDetail/${product.id}`);
+    router.push(`/productos/productDetail/${product.id}`);
   }
 
   const formattedCategory = category
@@ -63,19 +67,30 @@ function ProductosContent() {
       {subcategory && subcategory.trim() !== '' && (
         <h3 className="text-xl font-medium text-center mt-2 text-text-secondary">{`${formattedSubcategory}`}</h3>
       )}
-      <div className="flex flex-wrap gap-4 justify-center mt-10">
-        {products.map((product) => (
-          <div
-            key={product.id}
-            className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 cursor-pointer"
-            onClick={() => {
-              handleProductClick(product);
-            }}
-          >
-            <ProductCard {...product} />
-          </div>
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center min-h-[300px] gap-4">
+          <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-text-secondary text-lg font-medium">Cargando productos de Bobcats...</p>
+        </div>
+      ) : products.length === 0 ? (
+        <div className="text-center py-16 text-text-secondary">
+          <p className="text-xl">No se encontraron productos en esta categoría.</p>
+        </div>
+      ) : (
+        <div className="flex flex-wrap gap-4 justify-center mt-10">
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 cursor-pointer"
+              onClick={() => {
+                handleProductClick(product);
+              }}
+            >
+              <ProductCard {...product} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

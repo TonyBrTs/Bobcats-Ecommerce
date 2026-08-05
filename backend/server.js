@@ -12,8 +12,21 @@ const app = express();
 const PORT = config.port;
 
 // Configuración de CORS
+const allowedOrigins = [
+  config.frontendUrl,
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "https://bobcats-ecommerce.vercel.app"
+];
+
 const corsOptions = {
-  origin: config.frontendUrl, // Toma la URL desde process.env.FRONTEND_URL
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Permitir peticiones en desarrollo
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],

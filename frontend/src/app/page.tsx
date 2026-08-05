@@ -7,16 +7,16 @@ import { ArrowRight, ShieldCheck, Truck, Headphones, Sparkles } from 'lucide-rea
 export default function Home() {
   const categories = [
     {
-      title: 'Hombres',
+      title: 'Hombre',
       description: 'Prendas y calzado técnico diseñados para resistir cualquier terreno.',
       image: '/Carousel/Equipment.png',
-      link: '/productos?category=hombres',
+      link: '/productos?category=hombre',
     },
     {
-      title: 'Mujeres',
+      title: 'Mujer',
       description: 'Comodidad, ajuste ergonómico y estilo en tus rutas outdoor.',
       image: '/Carousel/Walk.png',
-      link: '/productos?category=mujeres',
+      link: '/productos?category=mujer',
     },
     {
       title: 'Accesorios',

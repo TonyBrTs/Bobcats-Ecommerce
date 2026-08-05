@@ -29,7 +29,6 @@ export default function Navbar() {
   const [favoriteDrawerOpen, setFavoriteDrawerOpen] = useState(false);
   const [user, setUser] = useState<{ email: string } | null>(null);
   const router = useRouter();
-  const { theme } = useTheme();
   const navLinks = [
     {
       name: 'Hombre',
@@ -96,9 +95,11 @@ export default function Navbar() {
     setFavoriteDrawerOpen(!favoriteDrawerOpen);
   };
 
-  // Choose logo based on theme
+  const { theme, mounted } = useTheme();
+
+  // Choose logo based on theme (ensuring matching SSR initial markup)
   const logoSrc =
-    theme === 'dark'
+    mounted && theme === 'dark'
       ? getImageUrl('/Logo_Blanco_Transparente.png')
       : getImageUrl('/Logo_Verde_Trasparente.png');
 
@@ -112,7 +113,8 @@ export default function Navbar() {
               <img 
                 src={logoSrc} 
                 alt="Logo" 
-                className="h-10 w-auto object-contain transition-all" 
+                className="h-14 lg:h-16 w-auto object-contain transition-all" 
+                suppressHydrationWarning
               />
             </Link>
           </div>
@@ -199,7 +201,7 @@ export default function Navbar() {
             menuOpen ? 'max-h-96 mt-4 px-6' : 'max-h-0 px-6'
           }`}
         >
-          <div className="space-y-3">
+          <div className="space-y-3 pb-4">
             {navLinks.map(({ name }) => (
               <Link
                 key={name}
@@ -207,6 +209,7 @@ export default function Navbar() {
                   pathname: '/productos',
                   query: { category: name.toLowerCase() },
                 }}
+                onClick={() => setMenuOpen(false)}
                 className={`block text-sm font-medium text-text-primary hover:text-accent relative after:block after:h-[2px] after:bg-accent after:transition-transform after:duration-300 after:origin-left
                   ${
                     selectedCategory === name.toLowerCase()
@@ -222,6 +225,7 @@ export default function Navbar() {
             {user ? (
               <button
                 onClick={() => {
+                  setMenuOpen(false);
                   localStorage.removeItem('token');
                   localStorage.removeItem('user');
                   localStorage.removeItem('cart');
@@ -235,6 +239,7 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/login"
+                onClick={() => setMenuOpen(false)}
                 className="block text-xs text-accent font-semibold uppercase tracking-wide hover:underline"
               >
                 Iniciar sesión

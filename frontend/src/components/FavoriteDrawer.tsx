@@ -81,6 +81,7 @@ export default function FavoriteDrawer({
                   {/* Enlace a la página del producto */}
                   <Link
                     href={`/productos/productDetail/${item.id}`}
+                    onClick={onClose}
                     className="flex gap-4 w-full pr-10"
                   >
                     {/* Imagen */}

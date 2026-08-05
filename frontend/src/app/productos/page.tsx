@@ -6,6 +6,12 @@ import type { Product } from '@/types/Product';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
+/**
+ * Componente interno que maneja la carga, filtrado y renderizado de productos
+ * según los parámetros de consulta `category` y `subcategory` presentes en la URL.
+ * 
+ * @returns Elemento JSX con la lista de productos filtrados o el indicador de carga.
+ */
 function ProductosContent() {
   const searchParams = useSearchParams();
   const category = searchParams.get('category');

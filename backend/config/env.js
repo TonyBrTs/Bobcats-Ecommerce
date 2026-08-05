@@ -1,9 +1,10 @@
-require("dotenv").config();
-
 /**
- * Validación de variables de entorno requeridas
- * El servidor no iniciará si faltan variables críticas
+ * @file config/env.js
+ * @description Módulo de configuración y validación de variables de entorno.
+ * Garantiza que el servidor cuente con las credenciales requeridas antes de iniciar.
  */
+
+require("dotenv").config();
 
 const requiredEnvVars = ["MONGODB_URI", "JWT_SECRET"];
 
@@ -18,13 +19,15 @@ if (missingVars.length > 0) {
   process.exit(1);
 }
 
-// Validar que JWT_SECRET tenga una longitud mínima
 if (process.env.JWT_SECRET && process.env.JWT_SECRET.length < 32) {
   console.warn(
     "⚠️  Advertencia: JWT_SECRET debería tener al menos 32 caracteres para mayor seguridad."
   );
 }
 
+/**
+ * Objeto de configuración global de la aplicación.
+ */
 module.exports = {
   mongodbUri: process.env.MONGODB_URI,
   jwtSecret: process.env.JWT_SECRET,

@@ -1,10 +1,18 @@
+/**
+ * @file routes/purchase-history.js
+ * @description Endpoints para registrar y obtener el historial de compras finalizadas del usuario.
+ */
+
 const express = require('express');
 const router = express.Router();
 const clientPromise = require('../services/mongodb');
 const authenticateToken = require('../middleware/auth');
 const logger = require('../utils/logger');
 
-// POST: Agregar una nueva compra al historial
+/**
+ * POST /api/purchase-history/add-purchase
+ * Registra una nueva compra en el historial del usuario.
+ */
 router.post("/add-purchase", authenticateToken, async (req, res) => {
   const { username, purchase } = req.body;
 
@@ -18,8 +26,8 @@ router.post("/add-purchase", authenticateToken, async (req, res) => {
 
     await db.collection('purchaseHistory').updateOne(
       { username },
-      { $push: { purchases: purchase } }, // Agrega la nueva compra al arreglo existente
-      { upsert: true }                    // Crea el documento si no existe
+      { $push: { purchases: purchase } },
+      { upsert: true }
     );
 
     res.json({ message: "Purchase added successfully." });
@@ -29,8 +37,10 @@ router.post("/add-purchase", authenticateToken, async (req, res) => {
   }
 });
 
-
-// GET: Obtener historial de compras
+/**
+ * GET /api/purchase-history/get-purchase-history
+ * Obtiene la lista completa de compras pasadas registradas por el usuario.
+ */
 router.get("/get-purchase-history", authenticateToken, async (req, res) => {
   const { username } = req.query;
 

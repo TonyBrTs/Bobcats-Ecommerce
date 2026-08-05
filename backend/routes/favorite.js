@@ -1,9 +1,18 @@
+/**
+ * @file routes/favorite.js
+ * @description Endpoints para sincronizar y obtener la lista de productos favoritos del usuario.
+ */
+
 const express = require('express');
 const router = express.Router();
 const clientPromise = require('../services/mongodb');
 const authenticateToken = require('../middleware/auth');
 const logger = require('../utils/logger');
 
+/**
+ * POST /api/favorite/update-favorites
+ * Sincroniza y actualiza la lista de favoritos de un usuario.
+ */
 router.post("/update-favorites", authenticateToken, async (req, res) => {
   const { username, favorites } = req.body;
   if (!username || !Array.isArray(favorites)) {
@@ -25,7 +34,10 @@ router.post("/update-favorites", authenticateToken, async (req, res) => {
   }
 });
 
-// Get favorites for a user
+/**
+ * GET /api/favorite/get-favorites
+ * Obtiene la lista de favoritos guardados de un usuario.
+ */
 router.get("/get-favorites", authenticateToken, async (req, res) => {
   const { username } = req.query;
 

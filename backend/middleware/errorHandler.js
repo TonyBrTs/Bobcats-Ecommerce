@@ -1,12 +1,20 @@
 /**
- * Middleware centralizado para manejo de errores
- * Captura todos los errores y los formatea de manera consistente
+ * @file middleware/errorHandler.js
+ * @description Middleware centralizado para el manejo de errores.
+ * Captura las excepciones de la aplicación y genera respuestas JSON formateadas.
  */
 
 const logger = require("../utils/logger");
 
+/**
+ * Manejador global de excepciones para Express.
+ * 
+ * @param {Error} err - Objeto de error capturado.
+ * @param {import('express').Request} req - Objeto de solicitud Express.
+ * @param {import('express').Response} res - Objeto de respuesta Express.
+ * @param {import('express').NextFunction} next - Función de continuación.
+ */
 const errorHandler = (err, req, res, next) => {
-  // Log del error completo en el servidor
   logger.error("Error capturado:", {
     message: err.message,
     stack: err.stack,
@@ -16,12 +24,10 @@ const errorHandler = (err, req, res, next) => {
     userAgent: req.get("user-agent"),
   });
 
-  // Si la respuesta ya fue enviada, delegar al handler por defecto de Express
   if (res.headersSent) {
     return next(err);
   }
 
-  // Errores de validación
   if (err.name === "ValidationError") {
     return res.status(400).json({
       message: err.message || "Error de validación",
@@ -29,14 +35,12 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // Errores de autenticación/autorización
   if (err.name === "UnauthorizedError" || err.status === 401) {
     return res.status(401).json({
       message: err.message || "No autorizado",
     });
   }
 
-  // Errores de JWT
   if (err.name === "JsonWebTokenError") {
     return res.status(403).json({
       message: "Token inválido",
@@ -49,7 +53,6 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // Errores de base de datos
   if (err.name === "MongoError" || err.name === "MongoServerError") {
     return res.status(500).json({
       message: "Error en la base de datos",
@@ -57,7 +60,6 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // Errores con status code definido
   if (err.status) {
     return res.status(err.status).json({
       message: err.message || "Error en la solicitud",
@@ -65,7 +67,6 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // Error genérico (500)
   res.status(500).json({
     message: err.message || "Error interno del servidor",
     ...(process.env.NODE_ENV === "development" && {

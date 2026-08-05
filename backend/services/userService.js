@@ -1,3 +1,8 @@
+/**
+ * @file services/userService.js
+ * @description Servicio de lógica de negocio para la gestión, registro y autenticación de usuarios.
+ */
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const clientPromise = require("./mongodb");
@@ -6,11 +11,12 @@ const logger = require("../utils/logger");
 
 class UserService {
   /**
-   * Registra un nuevo usuario
-   * @param {string} username - Nombre de usuario
-   * @param {string} email - Email del usuario
-   * @param {string} password - Contraseña sin encriptar
-   * @returns {Promise<{id: number, username: string, email: string}>}
+   * Registra un nuevo usuario en la base de datos.
+   * 
+   * @param {string} username - Nombre de usuario.
+   * @param {string} email - Correo electrónico del usuario.
+   * @param {string} password - Contraseña en texto plano.
+   * @returns {Promise<{id: number, username: string, email: string}>} Objeto de usuario registrado.
    */
   async registerUser(username, email, password) {
     try {
@@ -18,7 +24,6 @@ class UserService {
       const db = client.db("BobcatsDB");
       const usersCollection = db.collection("users");
 
-      // Verificar si el usuario o email ya existe
       const existingUser = await usersCollection.findOne({
         $or: [{ email }, { username }],
       });
@@ -29,7 +34,6 @@ class UserService {
         throw error;
       }
 
-      // Obtener el último ID de usuario
       const lastUser = await usersCollection
         .find()
         .sort({ id: -1 })
@@ -37,10 +41,8 @@ class UserService {
         .toArray();
       const newUserId = lastUser.length > 0 ? lastUser[0].id + 1 : 1;
 
-      // Encriptar contraseña
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Crear nuevo usuario
       const newUser = {
         id: newUserId,
         username,
@@ -64,10 +66,11 @@ class UserService {
   }
 
   /**
-   * Autentica un usuario y genera un token JWT
-   * @param {string} email - Email del usuario
-   * @param {string} password - Contraseña sin encriptar
-   * @returns {Promise<{token: string, user: {id: number, username: string, email: string}}>}
+   * Autentica un usuario verificando sus credenciales y emite un token JWT.
+   * 
+   * @param {string} email - Correo electrónico.
+   * @param {string} password - Contraseña en texto plano.
+   * @returns {Promise<{token: string, user: {id: number, username: string, email: string}}>} Datos de autenticación.
    */
   async loginUser(email, password) {
     try {
@@ -75,7 +78,6 @@ class UserService {
       const db = client.db("BobcatsDB");
       const usersCollection = db.collection("users");
 
-      // Buscar usuario por email
       const user = await usersCollection.findOne({ email });
 
       if (!user) {
@@ -84,7 +86,6 @@ class UserService {
         throw error;
       }
 
-      // Verificar contraseña
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
@@ -93,7 +94,6 @@ class UserService {
         throw error;
       }
 
-      // Generar token JWT
       const token = jwt.sign(
         { id: user.id, email: user.email },
         config.jwtSecret,
@@ -116,9 +116,10 @@ class UserService {
   }
 
   /**
-   * Obtiene un usuario por ID
-   * @param {number} userId - ID del usuario
-   * @returns {Promise<{id: number, username: string, email: string} | null>}
+   * Obtiene los datos públicos de un usuario por su ID.
+   * 
+   * @param {number} userId - ID del usuario.
+   * @returns {Promise<{id: number, username: string, email: string} | null>} Objeto de usuario o null.
    */
   async getUserById(userId) {
     try {

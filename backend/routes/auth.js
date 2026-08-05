@@ -1,13 +1,21 @@
+/**
+ * @file routes/auth.js
+ * @description Endpoints de la API para registro e inicio de sesión de usuarios.
+ */
+
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const { validateFields } = require("../utils/validators");
 const userService = require("../services/userService");
 
+/**
+ * POST /api/users/register
+ * Registra un nuevo usuario en el sistema previa validación de credenciales.
+ */
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
 
-  // Validar campos usando validadores centralizados
   const validation = validateFields({ username, email, password });
   if (!validation.valid) {
     const response = {
@@ -18,7 +26,6 @@ router.post("/register", async (req, res) => {
         "Por favor, revisa los campos marcados y corrige los errores antes de continuar",
     };
 
-    // Si hay errores de contraseña, incluir las reglas explícitamente
     if (validation.errors.passwordRules) {
       response.passwordRules = {
         allRules: validation.errors.passwordRules,
@@ -37,7 +44,6 @@ router.post("/register", async (req, res) => {
       user,
     });
   } catch (error) {
-    // Si el error tiene un status code, usarlo; si no, 500
     const statusCode = error.status || 500;
     res.status(statusCode).json({
       message: error.message || "Error en la base de datos",
@@ -45,11 +51,13 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Login
+/**
+ * POST /api/users/login
+ * Autentica un usuario y retorna un token JWT válido.
+ */
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  // Validar campos usando validadores centralizados
   const validation = validateFields({ email, password });
   if (!validation.valid) {
     const response = {
@@ -60,7 +68,6 @@ router.post("/login", async (req, res) => {
         "Por favor, revisa los campos marcados y corrige los errores antes de continuar",
     };
 
-    // Si hay errores de contraseña, incluir las reglas explícitamente
     if (validation.errors.passwordRules) {
       response.passwordRules = {
         allRules: validation.errors.passwordRules,
@@ -80,7 +87,6 @@ router.post("/login", async (req, res) => {
       user: result.user,
     });
   } catch (error) {
-    // Si el error tiene un status code, usarlo; si no, 500
     const statusCode = error.status || 500;
     res.status(statusCode).json({
       message: error.message || "Error en la base de datos",

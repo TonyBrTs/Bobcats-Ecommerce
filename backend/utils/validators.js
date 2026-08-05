@@ -1,6 +1,6 @@
 /**
- * Validadores centralizados para reutilizar en diferentes rutas
- * Evita duplicación de código de validación
+ * @file utils/validators.js
+ * @description Funciones de validación para correo, nombre de usuario y fortaleza de contraseñas.
  */
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

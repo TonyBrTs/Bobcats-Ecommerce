@@ -1,9 +1,18 @@
+/**
+ * @file routes/cart.js
+ * @description Endpoints para sincronizar y obtener el carrito de compras del usuario.
+ */
+
 const express = require("express");
 const router = express.Router();
 const clientPromise = require("../services/mongodb");
 const authenticateToken = require("../middleware/auth");
 const logger = require("../utils/logger");
 
+/**
+ * POST /api/cart/update-cart
+ * Sincroniza y actualiza el carrito de compras de un usuario.
+ */
 router.post('/update-cart', authenticateToken, async (req, res) => {
   const { username, cart } = req.body;
   if (!username || !Array.isArray(cart)) {
@@ -25,6 +34,10 @@ router.post('/update-cart', authenticateToken, async (req, res) => {
   }
 });
 
+/**
+ * GET /api/cart/get-cart
+ * Obtiene el carrito de compras guardado del usuario.
+ */
 router.get('/get-cart', authenticateToken, async (req, res) => {
   const username = req.query.username;
   if (!username) {

@@ -1,116 +1,108 @@
-# 🏔️ Bobcats Ecommerce - Adventure Portal
+# 🏔️ Bobcats Ecommerce - Portal de Aventura
 
-Welcome to the official repository for **Bobcats Ecommerce**! This project is a modern, premium, and highly functional e-commerce portal specializing in adventure, hiking, and outdoor gear.
-
----
-
-## 🏗️ System Architecture
-
-The project follows a simplified microservices architecture based on a monorepo that effectively separates frontend and backend concerns:
-
-- **Frontend (`/frontend`)**: Dynamic user interface built with **Next.js 15**.
-- **Backend (`/backend`)**: Main API for user management, products, and authentication with **Node.js/Express**.
-- **Database**: **MongoDB** implementation for scalable data persistence.
-- **Payment API (`/payment-api`)**: Dedicated microservice for processing payments and transactions.
+Bienvenido a la documentación oficial del proyecto **Bobcats Ecommerce**. Esta plataforma es un comercio electrónico moderno, responsivo y de alto rendimiento especializado en equipamiento outdoor, ropa técnica y accesorios para aventuras al aire libre.
 
 ---
 
-## 🛠️ Technology Stack
+## 🏗️ Arquitectura del Sistema
+
+El proyecto sigue una arquitectura monorepo organizada en microservicios y capas bien definidas:
+
+- **Frontend (`/frontend`)**: Aplicación web desarrollada con **Next.js (App Router)** y **TypeScript**.
+- **Backend Principal (`/backend`)**: API RESTful construida con **Node.js** y **Express**, responsable del catálogo de productos, autenticación de usuarios, carrito de compras y favoritos.
+- **Base de Datos**: **MongoDB Atlas** para persistencia distribuida y escalable.
+- **Payment API (`/payment-api`)**: Microservicio independiente especializado en el procesamiento de pagos.
+
+```
+Bobcats-Ecommerce/
+├── frontend/             # Aplicación Next.js 16 (App Router)
+│   ├── src/app/          # Páginas (Inicio, Catálogo, Detalle, Checkout, Perfil)
+│   ├── src/components/   # Componentes UI (Navbar, CartDrawer, ThemeToggle, etc.)
+│   ├── src/config/       # Configuración centralizada de APIs y URLs
+│   ├── src/context/      # Contextos globales (ThemeContext)
+│   └── src/types/        # Definiciones de tipos TypeScript
+├── backend/              # API Node.js / Express
+│   ├── config/           # Validación de variables de entorno (env.js)
+│   ├── middleware/       # Rate limiting, Auth JWT y manejo de errores
+│   ├── routes/           # Endpoints API (products, auth, cart, favorite, etc.)
+│   ├── services/         # Conexión a MongoDB (mongodb.js)
+│   └── utils/            # Sistema de logging con Winston
+├── payment-api/          # Microservicio de Pagos
+└── README.md             # Documentación principal
+```
+
+---
+
+## 🛠️ Tecnologías Utilizadas
 
 ### Frontend
+- **Framework**: Next.js 16 (App Router / Turbopack)
+- **Lenguaje**: TypeScript
+- **Estilos**: Tailwind CSS (con variables de tema HSL y modo oscuro dinámico)
+- **Iconografía**: Lucide React
+- **Gestión de Estado y Contexto**: React Context API & LocalStorage
 
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS 4.0 (Modern Aesthetics)
-- **Components**: React (Hooks)
-- **Iconography**: Lucide React
-- **Interactivity**: Keen Slider
-- **Theming**: Native Dark Mode support with smooth transitions.
-
-### Backend & API
-
-- **Environment**: Node.js
+### Backend & Seguridad
+- **Runtime**: Node.js
 - **Framework**: Express.js
-- **Database**: MongoDB (Environment-optimized connectivity)
-- **Authentication**: JWT + Cookies (HttpOnly for enhanced XSS security)
-- **Security**:
-  - Password hashing with `bcryptjs`.
-  - Integrated Rate Limiting to prevent brute force attacks.
-- **Logging**: Professional logging system with `winston`.
+- **Base de Datos**: MongoDB (Driver Oficial + MongoDB Atlas)
+- **Seguridad**:
+  - Hashing de contraseñas con `bcryptjs`.
+  - Autenticación mediante JSON Web Tokens (`JWT`).
+  - Protección de endpoints con `express-rate-limit`.
+  - Configuración dinámica de políticas `CORS`.
+- **Logger**: Logging estructurado con `winston`.
 
 ---
 
-## 🚀 Installation and Usage Guide
+## 🔧 Configuración de Entornos (Local vs Producción)
 
-### 1. Clone the repository
+El proyecto soporta configuración transparente según el entorno:
 
+- **Desarrollo Local**: 
+  - El frontend utiliza `frontend/.env.local` configurado apuntando a `http://localhost:3001`.
+  - El backend se ejecuta localmente en el puerto `3001` permitiendo peticiones desde `http://localhost:3000`.
+- **Producción**:
+  - El frontend utiliza `frontend/.env.production` configurado apuntando a la API en Render (`https://bobcats-ecommerce.onrender.com`).
+
+---
+
+## 🚀 Guía de Instalación y Ejecución Local
+
+### 1. Clonar el repositorio
 ```bash
 git clone https://github.com/nathRodriguez/BOBCATS_DesarrolloWeb.git
 cd Bobcats-Ecommerce
 ```
 
-### 2. Start the Frontend
+### 2. Iniciar el Backend
+```bash
+cd backend
+npm install
+npm run dev
+# Servidor escuchando en http://localhost:3001
+```
 
+### 3. Iniciar el Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
-# Access at http://localhost:3000
-```
-
-### 3. Start the Backend
-
-```bash
-cd backend
-npm install
-npm run dev # Uses nodemon for development
-# Runs at http://localhost:3001
-```
-
-### 4. Start the Payment API
-
-```bash
-cd payment-api
-npm install
-npm run dev
-# Runs at http://localhost:3002 (or configured port)
+# Disponible en http://localhost:3000
 ```
 
 ---
 
-## 📁 Project Structure
+## ✨ Funcionalidades Destacadas
 
-```plaintext
-Bobcats-Ecommerce/
-├── frontend/             # Next.js 15 Interface
-│   ├── src/app/          # Pages (Home, Products, Checkout, etc.)
-│   ├── src/components/   # UI Components (Navbar, CartDrawer, etc.)
-│   └── public/           # Static assets
-├── backend/              # Main API (Authentication & Products with MongoDB)
-├── payment-api/          # Payment Microservice
-└── README.md             # Main Documentation
-```
+1. **Modo Claro / Oscuro Inteligente**: Soporte completo para temas de color sin errores de *Hydration Mismatch* en SSR.
+2. **Navegación Fluida**: Menús desplegables y paneles laterales (*Drawers*) que se pliegan automáticamente al interactuar o hacer clic en cualquier opción.
+3. **Selección Condicional de Opciones**: Ajuste dinámico en el detalle del producto; solo exige seleccionar talla y/o color según la disponibilidad del ítem (ej. ropa solicita talla y color; botellas o bolsos solo solicitan color).
+4. **Página de Inicio Dinámica**: Secciones dedicadas a categorías principales (Hombre, Mujer, Accesorios), propuestas de valor y llamada a la acción.
+5. **Estado de Carga (Loading Spinner)**: Pantalla de carga visualmente atractiva al consultar productos del catálogo.
 
 ---
 
-## ✨ Featured Features
+## 📜 Licencia y Autores
 
-- **Advanced Security**: Secure cookie implementation and rate limiting to protect the API.
-- **Robust Persistence**: Use of MongoDB for efficient data management.
-- **Interactivity**: Side menus (Drawers) for cart and search.
-- **Responsive**: Optimized design for mobile and desktop.
-- **User Experience**: Fluid transitions and animations with Lucide and Tailwind.
-- **Purchase History**: Dedicated purchase record per user.
-
----
-
-## 🔮 Roadmap
-
-- [ ] Cloud deployment (Vercel / Render / Atlas).
-- [ ] Real payment support with Stripe.
-- [ ] Comprehensive multi-language support (i18n).
-- [ ] Advanced SEO optimization.
-
----
-
-# End of Documentation
+Desarrollado para **Bobcats Ecommerce**. Todos los derechos reservados.

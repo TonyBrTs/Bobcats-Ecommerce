@@ -10,6 +10,13 @@ import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+/**
+ * Componente de vista detallada de producto.
+ * Permite visualizar las imágenes, precio, descripción, seleccionar variaciones
+ * (colores y tallas disponibles) y agregar el producto al carrito o a favoritos.
+ * 
+ * @returns Elemento JSX con la vista de detalle del producto.
+ */
 export default function ProductDetail() {
   const { productId } = useParams();
   const [product, setProduct] = useState<Product | null>(null);

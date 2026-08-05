@@ -1,8 +1,13 @@
+/**
+ * @file utils/logger.js
+ * @description Sistema centralizado de registro de eventos (Logging) usando Winston.
+ * Almacena logs formateados en consola (desarrollo) y en archivos rotativos (producción).
+ */
+
 const winston = require("winston");
 const path = require("path");
 const config = require("../config/env");
 
-// Definir niveles de log personalizados
 const levels = {
   error: 0,
   warn: 1,
@@ -11,7 +16,6 @@ const levels = {
   debug: 4,
 };
 
-// Colores para cada nivel
 const colors = {
   error: "red",
   warn: "yellow",
@@ -22,7 +26,6 @@ const colors = {
 
 winston.addColors(colors);
 
-// Formato para consola (desarrollo)
 const consoleFormat = winston.format.combine(
   winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
   winston.format.colorize({ all: true }),
@@ -38,40 +41,37 @@ const consoleFormat = winston.format.combine(
   })
 );
 
-// Formato para archivos (producción)
 const fileFormat = winston.format.combine(
   winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
   winston.format.errors({ stack: true }),
   winston.format.json()
 );
 
-// Crear el logger
+/**
+ * Instancia global del Logger configurada para el sistema.
+ */
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || (config.nodeEnv === "production" ? "info" : "debug"),
   levels,
   format: fileFormat,
   transports: [
-    // Archivo para errores
     new winston.transports.File({
       filename: path.join(__dirname, "../logs/error.log"),
       level: "error",
-      maxsize: 5242880, // 5MB
+      maxsize: 5242880,
       maxFiles: 5,
     }),
-    // Archivo para todos los logs
     new winston.transports.File({
       filename: path.join(__dirname, "../logs/combined.log"),
-      maxsize: 5242880, // 5MB
+      maxsize: 5242880,
       maxFiles: 5,
     }),
   ],
-  // Manejar excepciones no capturadas
   exceptionHandlers: [
     new winston.transports.File({
       filename: path.join(__dirname, "../logs/exceptions.log"),
     }),
   ],
-  // Manejar promesas rechazadas
   rejectionHandlers: [
     new winston.transports.File({
       filename: path.join(__dirname, "../logs/rejections.log"),
@@ -79,7 +79,6 @@ const logger = winston.createLogger({
   ],
 });
 
-// En desarrollo, también mostrar en consola
 if (config.nodeEnv !== "production") {
   logger.add(
     new winston.transports.Console({

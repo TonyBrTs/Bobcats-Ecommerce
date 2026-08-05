@@ -49,8 +49,7 @@ export default function LoginPage() {
         const data = await res.json();
 
         if (res.ok) {
-          //Guarda el token y datos del usuario
-          localStorage.setItem("token", data.token);
+          // Store non-sensitive user info only (token is handled via HttpOnly cookie)
           localStorage.setItem("user", JSON.stringify(data.user));
           const userCart = await getUserCart(data.user.username);
           localStorage.setItem("cart", JSON.stringify(userCart));

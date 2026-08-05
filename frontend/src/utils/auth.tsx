@@ -1,31 +1,20 @@
 import { jwtDecode } from "jwt-decode";
 
 /**
- * Gets the current user from localStorage if the token is valid.
- * Returns the user object or null if not authenticated or token expired.
+ * Gets the current user object stored in localStorage.
+ * Token authentication is handled securely via HttpOnly cookies by the browser.
+ * 
+ * @returns The user profile object or null if not authenticated.
  */
 export function getCurrentUser(): any | null {
-  const token = localStorage.getItem("token");
-  const userData = localStorage.getItem("user");
+  const userData = typeof window !== "undefined" ? localStorage.getItem("user") : null;
 
-  if (token && userData) {
+  if (userData) {
     try {
-      const decoded: { exp: number } = jwtDecode(token);
-      const now = Date.now() / 1000;
-      if (decoded.exp < now) {
-        // Token expired
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        return null;
-      } else {
-        const user = JSON.parse(userData);
-        if (!user.username) {
-          console.warn("[getCurrentUser] El usuario no tiene username:", user);
-        }
-        return user;
-      }
+      const user = JSON.parse(userData);
+      return user;
     } catch (err) {
-      console.error("Error decoding token:", err);
+      console.error("Error parsing user profile:", err);
       return null;
     }
   }
@@ -33,28 +22,11 @@ export function getCurrentUser(): any | null {
 }
 
 /**
- * Gets the authentication token from localStorage.
- * Returns the token string or null if not found or expired.
+ * Gets the authentication token from localStorage if present (legacy fallback).
+ * 
+ * @returns The token string or null.
  */
 export function getAuthToken(): string | null {
-  const token = localStorage.getItem("token");
-  
-  if (!token) {
-    return null;
-  }
-
-  try {
-    const decoded: { exp: number } = jwtDecode(token);
-    const now = Date.now() / 1000;
-    if (decoded.exp < now) {
-      // Token expired
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      return null;
-    }
-    return token;
-  } catch (err) {
-    console.error("Error decoding token:", err);
-    return null;
-  }
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("token");
 }

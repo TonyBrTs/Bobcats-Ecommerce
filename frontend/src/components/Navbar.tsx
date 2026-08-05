@@ -112,9 +112,7 @@ export default function Navbar() {
               <img 
                 src={logoSrc} 
                 alt="Logo" 
-                className={`h-auto object-contain transition-all ${
-                  theme === 'dark' ? 'w-24 lg:w-28' : 'w-16 lg:w-20'
-                }`} 
+                className="h-10 w-auto object-contain transition-all" 
               />
             </Link>
           </div>

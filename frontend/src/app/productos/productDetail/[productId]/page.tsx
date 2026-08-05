@@ -34,7 +34,10 @@ export default function ProductDetail() {
       return;
     }
 
-    if (!selectedColor || !selectedSize) {
+    const hasColors = Boolean(product.colors && product.colors.length > 0);
+    const hasSizes = Boolean(product.sizes && product.sizes.length > 0);
+
+    if ((hasColors && !selectedColor) || (hasSizes && !selectedSize)) {
       setToastType('warning');
       setShowToast(true);
       setTimeout(() => {
@@ -52,8 +55,8 @@ export default function ProductDetail() {
     } else {
       cart.push({
         ...product,
-        selectedColor,
-        selectedSize,
+        ...(hasColors && selectedColor ? { selectedColor } : {}),
+        ...(hasSizes && selectedSize ? { selectedSize } : {}),
       });
       localStorage.setItem('cart', JSON.stringify(cart));
       setToastType('success');
@@ -293,9 +296,7 @@ export default function ProductDetail() {
             </svg>
           </div>
           <div className="ms-3 font-medium">
-            {selectedColor && selectedSize
-              ? 'Este producto ya está en el carrito.'
-              : 'Debes seleccionar un color y una talla antes de agregar al carrito.'}
+            Por favor verifica las opciones requeridas (color/talla) o revisa si el producto ya está en tu carrito.
           </div>
         </div>
       </div>

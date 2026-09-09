@@ -4,21 +4,18 @@ import { useTheme } from '@/context/ThemeContext';
 import { Moon, Sun } from 'lucide-react';
 
 export default function ThemeToggle() {
-  const { theme, toggleTheme, mounted } = useTheme();
+  const { toggleTheme } = useTheme();
 
   return (
     <button
       onClick={toggleTheme}
+      type="button"
       className="relative w-9 h-9 flex items-center justify-center rounded-full transition-colors duration-200 hover:bg-surface cursor-pointer"
-      aria-label={mounted && theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-      title={mounted && theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
-      suppressHydrationWarning
+      aria-label="Cambiar tema"
+      title="Cambiar tema"
     >
-      {mounted && theme === 'dark' ? (
-        <Sun className="w-5 h-5 text-text-secondary hover:text-accent transition-colors" />
-      ) : (
-        <Moon className="w-5 h-5 text-text-secondary hover:text-accent transition-colors" />
-      )}
+      <Sun className="w-5 h-5 text-text-secondary hover:text-accent transition-colors hidden dark:block" />
+      <Moon className="w-5 h-5 text-text-secondary hover:text-accent transition-colors block dark:hidden" />
     </button>
   );
 }
